@@ -1,8 +1,8 @@
-import InternshipFinder from '@/components/internship-finder';
+import MockInterview from '@/components/mock-interview';
 import { GraduationCap, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 
-export default function Home() {
+export default function MockInterviewPage() {
   return (
     <div className="flex flex-col min-h-dvh bg-background font-body">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -17,7 +17,7 @@ export default function Home() {
           </div>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             <Link
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              className="transition-colors hover:text-foreground/80 text-foreground"
               href="/mock-interview"
             >
               <Briefcase className="inline-block mr-2 h-5 w-5" />
@@ -27,7 +27,7 @@ export default function Home() {
         </div>
       </header>
       <main className="flex-1">
-        <InternshipFinder />
+        <MockInterview />
       </main>
       <footer className="py-6 md:px-8 md:py-0">
         <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">
