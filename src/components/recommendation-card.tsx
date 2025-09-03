@@ -1,4 +1,5 @@
 import { Briefcase, MapPin } from "lucide-react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -17,6 +18,7 @@ type Recommendation = {
   description: string;
   location: string;
   relevanceScore: number;
+  applyUrl: string;
 };
 
 type RecommendationCardProps = {
@@ -53,7 +55,11 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
             <MapPin className="h-3 w-3 mr-1.5" />
             {recommendation.location}
           </Badge>
-          <Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">Apply Now</Button>
+          <Button asChild size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
+            <Link href={recommendation.applyUrl} target="_blank">
+                Apply Now
+            </Link>
+          </Button>
         </div>
       </CardFooter>
     </Card>

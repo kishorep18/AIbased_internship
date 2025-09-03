@@ -12,10 +12,10 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const RecommendInternshipsInputSchema = z.object({
-  education: z.string().describe('The candidate\'s highest level of education.'),
-  skills: z.array(z.string()).describe('A list of the candidate\'s skills.'),
-  sectorInterests: z.array(z.string()).describe('A list of the candidate\'s sector interests.'),
-  location: z.string().describe('The candidate\'s preferred location.'),
+  education: z.string().describe("The candidate's highest level of education."),
+  skills: z.array(z.string()).describe("A list of the candidate's skills."),
+  sectorInterests: z.array(z.string()).describe("A list of the candidate's sector interests."),
+  location: z.string().describe("The candidate's preferred location."),
 });
 export type RecommendInternshipsInput = z.infer<typeof RecommendInternshipsInputSchema>;
 
@@ -27,6 +27,7 @@ const RecommendInternshipsOutputSchema = z.object({
       description: z.string().describe('A brief description of the internship.'),
       location: z.string().describe('The location of the internship.'),
       relevanceScore: z.number().describe('A score indicating the relevance of the internship to the candidate.'),
+      applyUrl: z.string().url().describe('A URL to apply for the internship. This should be a placeholder link to a job board or company website.'),
     })
   ).describe('A list of recommended internships.'),
 });
@@ -49,7 +50,7 @@ const prompt = ai.definePrompt({
   - Location: {{{location}}}
 
   Please provide 3-5 internship recommendations that are most relevant to the candidate's profile.
-  Format the output as a JSON object with an array of internship recommendations, each including the title, company, description, location and relevanceScore.  The relevanceScore should be from 0 to 1.
+  Format the output as a JSON object with an array of internship recommendations, each including the title, company, description, location, relevanceScore, and applyUrl. The relevanceScore should be from 0 to 1. The applyUrl should be a placeholder link to a relevant job board or company website (e.g., https://linkedin.com/jobs).
   `,
 });
 
