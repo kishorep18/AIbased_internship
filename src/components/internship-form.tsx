@@ -10,6 +10,9 @@ import {
   Loader2,
   MapPin,
   Search,
+  User,
+  Cake,
+  CalendarIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -32,9 +35,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+
 import type { RecommendInternshipsInput } from "@/ai/flows/recommend-internships";
 
 const formSchema = z.object({
+  name: z.string().min(2, "Please enter your name."),
+  age: z.string().min(1, "Please enter your age."),
+  dob: z.date({ required_error: "A date of birth is required." }),
   education: z.string().min(1, "Please select your education level."),
   skills: z.string().min(3, "Please enter at least one skill."),
   sectorInterests: z.string().min(1, "Please select a sector of interest."),
@@ -70,6 +81,8 @@ export function InternshipForm({ onSubmit, isLoading }: InternshipFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
+      age: "",
       education: "",
       skills: "",
       sectorInterests: "",
@@ -85,6 +98,7 @@ export function InternshipForm({ onSubmit, isLoading }: InternshipFormProps) {
     
     const processedData: RecommendInternshipsInput = {
       ...values,
+      dob: format(values.dob, 'PPP'),
       skills: skillsArray,
       sectorInterests: [values.sectorInterests],
     };
@@ -104,6 +118,97 @@ export function InternshipForm({ onSubmit, isLoading }: InternshipFormProps) {
             onSubmit={form.handleSubmit(handleFormSubmit)}
             className="space-y-6"
           >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      <User className="inline-block mr-2 h-4 w-4" />
+                      Full Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g., John Doe"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="age"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      <Cake className="inline-block mr-2 h-4 w-4" />
+                      Age
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="e.g., 21"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            
+            <FormField
+              control={form.control}
+              name="dob"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>
+                    <CalendarIcon className="inline-block mr-2 h-4 w-4" />
+                    Date of Birth
+                  </FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                          disabled={isLoading}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date("1900-01-01")
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="education"

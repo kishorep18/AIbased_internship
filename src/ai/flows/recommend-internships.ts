@@ -12,6 +12,9 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const RecommendInternshipsInputSchema = z.object({
+  name: z.string().describe("The candidate's name."),
+  age: z.string().describe("The candidate's age."),
+  dob: z.string().describe("The candidate's date of birth."),
   education: z.string().describe("The candidate's highest level of education."),
   skills: z.array(z.string()).describe("A list of the candidate's skills."),
   sectorInterests: z.array(z.string()).describe("A list of the candidate's sector interests."),
@@ -44,6 +47,9 @@ const prompt = ai.definePrompt({
   prompt: `You are an AI assistant that recommends 3-5 internships to candidates based on their profile information.
 
   Candidate Profile:
+  - Name: {{{name}}}
+  - Age: {{{age}}}
+  - Date of Birth: {{{dob}}}
   - Education: {{{education}}}
   - Skills: {{#each skills}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
   - Sector Interests: {{#each sectorInterests}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
