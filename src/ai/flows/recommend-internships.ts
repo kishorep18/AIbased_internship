@@ -44,7 +44,7 @@ const prompt = ai.definePrompt({
   name: 'recommendInternshipsPrompt',
   input: {schema: RecommendInternshipsInputSchema},
   output: {schema: RecommendInternshipsOutputSchema},
-  prompt: `You are an AI assistant that recommends 3-5 internships to candidates based on their profile information.
+  prompt: `You are an AI assistant that recommends 3-5 internships to candidates based on their profile information. All internship recommendations must be from the "PM Internship Scheme".
 
   Candidate Profile:
   - Name: {{{name}}}
@@ -55,7 +55,7 @@ const prompt = ai.definePrompt({
   - Sector Interests: {{#each sectorInterests}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
   - Location: {{{location}}}
 
-  Please provide 3-5 internship recommendations that are most relevant to the candidate's profile.
+  Please provide 3-5 internship recommendations that are most relevant to the candidate's profile from the "PM Internship Scheme".
   Format the output as a JSON object with an array of internship recommendations, each including the title, company, description, location, relevanceScore, and applyUrl. The relevanceScore should be from 0 to 1. The applyUrl should be a placeholder link to a relevant job board, like LinkedIn, Indeed, or a company's career page. For example, for a "Software Engineer Intern" at "Google", a good link would be "https://www.linkedin.com/jobs/search/?keywords=Software%20Engineer%20Intern%20Google".
   `,
 });
