@@ -1,5 +1,5 @@
 import MockInterview from '@/components/mock-interview';
-import { GraduationCap, Briefcase } from 'lucide-react';
+import { GraduationCap, Briefcase, LogIn } from 'lucide-react';
 import Link from 'next/link';
 
 export default function MockInterviewPage() {
@@ -16,12 +16,19 @@ export default function MockInterviewPage() {
             </Link>
           </div>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            <Link
+             <Link
               className="transition-colors hover:text-foreground/80 text-foreground"
               href="/mock-interview"
             >
               <Briefcase className="inline-block mr-2 h-5 w-5" />
               Mock Interview
+            </Link>
+            <Link
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              href="/login"
+            >
+              <LogIn className="inline-block mr-2 h-5 w-5" />
+              Login
             </Link>
           </nav>
         </div>

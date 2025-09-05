@@ -1,5 +1,5 @@
 import InternshipFinder from '@/components/internship-finder';
-import { GraduationCap, Briefcase } from 'lucide-react';
+import { GraduationCap, Briefcase, LogIn } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Home() {
@@ -22,6 +22,13 @@ export default function Home() {
             >
               <Briefcase className="inline-block mr-2 h-5 w-5" />
               Mock Interview
+            </Link>
+            <Link
+              className="transition-colors hover:text-foreground/80 text-foreground"
+              href="/login"
+            >
+              <LogIn className="inline-block mr-2 h-5 w-5" />
+              Login
             </Link>
           </nav>
         </div>
