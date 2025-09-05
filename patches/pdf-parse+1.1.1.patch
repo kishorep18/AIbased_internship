@@ -1,13 +1,13 @@
-diff --git a/node_modules/pdf-parse/lib/pdf.js b/node_modules/pdf-parse/lib/pdf.js
-index 79c3f3d..835f55d 100644
---- a/node_modules/pdf-parse/lib/pdf.js
-+++ b/node_modules/pdf-parse/lib/pdf.js
+diff --git a/node_modules/pdf-parse/index.js b/node_modules/pdf-parse/index.js
+index 036b044..2a32197 100644
+--- a/node_modules/pdf-parse/index.js
++++ b/node_modules/pdf-parse/index.js
 @@ -10,7 +10,7 @@
  'use strict';
  
- const { getDocument, PDFDataRangeTransport, shadow } = require('pdfjs-dist/legacy/build/pdf.js');
--const { Util } = require('pdfjs-dist/legacy/build/pdf.worker.js');
-+const { Util } = require('pdfjs-dist/legacy/build/pdf.js');
+ const PDFJS = require('./lib/pdf.js');
+-const {PNG} = require('pngjs');
++const PNG = () => {};
  
- //
- //  Simple parser for buffer
+ function render_page(pageData) {
+     //check documents https://mozilla.github.io/pdf.js/typedoc/interfaces/PageViewport.html
