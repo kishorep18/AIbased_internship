@@ -45,8 +45,25 @@ export function LoginForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // This is where you would handle the actual login logic
-    toast({ title: "Login is not implemented", description: "This is a placeholder for login functionality." });
+    // Simulate a login request
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    if (values.email === "web@gmail.com" && values.password === "server") {
+      toast({
+        title: "Login Successful",
+        description: "Welcome back! Redirecting you now...",
+      });
+      // Redirect to home page on successful login
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1500);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Invalid Credentials",
+        description: "Please check your email and password and try again.",
+      });
+    }
   };
   
   const handleGoogleSignIn = async () => {
@@ -70,7 +87,7 @@ export function LoginForm() {
                 <FormItem>
                   <FormLabel>Email Address</FormLabel>
                   <FormControl>
-                    <Input placeholder="name@example.com" {...field} />
+                    <Input placeholder="name@example.com" {...field} disabled={form.formState.isSubmitting} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -88,7 +105,7 @@ export function LoginForm() {
                     </Link>
                   </div>
                   <FormControl>
-                    <Input type="password" placeholder="••••••••" {...field} />
+                    <Input type="password" placeholder="••••••••" {...field} disabled={form.formState.isSubmitting} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -114,7 +131,7 @@ export function LoginForm() {
                 </div>
             </div>
 
-             <Button variant="outline" className="w-full" size="lg" onClick={handleGoogleSignIn}>
+             <Button variant="outline" className="w-full" size="lg" onClick={handleGoogleSignIn} disabled={form.formState.isSubmitting}>
                 <GoogleIcon className="mr-2" />
                 Sign in with Google
             </Button>
