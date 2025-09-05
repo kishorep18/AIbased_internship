@@ -2,7 +2,6 @@
 
 import { recommendInternships, type RecommendInternshipsInput, type RecommendInternshipsOutput } from "@/ai/flows/recommend-internships";
 import { conductInterview, type ConductInterviewInput, type ConductInterviewOutput } from "@/ai/flows/mock-interview";
-import pdf from "pdf-parse";
 
 export async function getInternshipRecommendations(
   data: RecommendInternshipsInput
@@ -45,20 +44,9 @@ export async function getInterviewQuestionsFromResume(
 
     try {
         const fileBuffer = await file.arrayBuffer();
-        let resumeText: string;
+        const resumeDataUri = `data:${file.type};base64,${Buffer.from(fileBuffer).toString('base64')}`;
 
-        if (file.type === 'application/pdf') {
-            const data = await pdf(Buffer.from(fileBuffer));
-            resumeText = data.text;
-        } else {
-            resumeText = Buffer.from(fileBuffer).toString('utf-8');
-        }
-
-        if (!resumeText) {
-             return { initialQuestions: [] };
-        }
-
-        const questions = await conductInterview({ resumeText });
+        const questions = await conductInterview({ resumeDataUri });
          if (!questions?.initialQuestions?.length) {
             return { initialQuestions: [] };
         }
