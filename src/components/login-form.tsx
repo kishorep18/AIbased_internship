@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -53,6 +54,8 @@ export function LoginForm() {
         title: "Login Successful",
         description: "Welcome back! Redirecting you now...",
       });
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userEmail', values.email);
       // Redirect to home page on successful login
       setTimeout(() => {
         window.location.href = "/";

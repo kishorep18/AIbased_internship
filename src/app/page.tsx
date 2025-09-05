@@ -1,8 +1,33 @@
+
+"use client";
+
+import { useState, useEffect } from 'react';
 import InternshipFinder from '@/components/internship-finder';
-import { GraduationCap, Briefcase, LogIn } from 'lucide-react';
+import { GraduationCap, Briefcase, LogIn, LogOut, UserCircle } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    const loggedInStatus = localStorage.getItem('isLoggedIn');
+    const email = localStorage.getItem('userEmail');
+    if (loggedInStatus === 'true' && email) {
+      setIsLoggedIn(true);
+      setUserEmail(email);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userEmail');
+    setIsLoggedIn(false);
+    setUserEmail('');
+    window.location.reload();
+  };
+
   return (
     <div className="flex flex-col min-h-dvh bg-background font-body">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -23,13 +48,26 @@ export default function Home() {
               <Briefcase className="inline-block mr-2 h-5 w-5" />
               Mock Interview
             </Link>
-            <Link
-              className="transition-colors hover:text-foreground/80 text-foreground"
-              href="/login"
-            >
-              <LogIn className="inline-block mr-2 h-5 w-5" />
-              Login
-            </Link>
+            {isLoggedIn ? (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                    <UserCircle className="h-5 w-5 text-primary" />
+                    <span className="text-foreground/80">{userEmail}</span>
+                </div>
+                <Button variant="ghost" onClick={handleLogout} className="text-foreground/60 hover:text-foreground/80">
+                  <LogOut className="inline-block mr-2 h-5 w-5" />
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <Link
+                className="transition-colors hover:text-foreground/80 text-foreground"
+                href="/login"
+              >
+                <LogIn className="inline-block mr-2 h-5 w-5" />
+                Login
+              </Link>
+            )}
           </nav>
         </div>
       </header>
