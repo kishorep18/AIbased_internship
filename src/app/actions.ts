@@ -44,14 +44,14 @@ export async function getInterviewQuestionsFromResume(
     }
 
     try {
-        const fileBuffer = Buffer.from(await file.arrayBuffer());
+        const fileBuffer = await file.arrayBuffer();
         let resumeText: string;
 
         if (file.type === 'application/pdf') {
-            const data = await pdf(fileBuffer);
+            const data = await pdf(Buffer.from(fileBuffer));
             resumeText = data.text;
         } else {
-            resumeText = fileBuffer.toString('utf-8');
+            resumeText = Buffer.from(fileBuffer).toString('utf-8');
         }
 
         if (!resumeText) {
