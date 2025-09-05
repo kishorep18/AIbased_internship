@@ -4,7 +4,6 @@ import { recommendInternships, type RecommendInternshipsInput, type RecommendInt
 import { conductInterview, type ConductInterviewInput, type ConductInterviewOutput } from "@/ai/flows/mock-interview";
 import { textToSpeech, type TextToSpeechInput, type TextToSpeechOutput } from "@/ai/flows/text-to-speech";
 import { analyzeVideoFeedback, type AnalyzeVideoFeedbackInput, type AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedback";
-import pdf from "pdf-parse";
 
 export async function getInternshipRecommendations(
   data: RecommendInternshipsInput
@@ -48,7 +47,6 @@ export async function getInterviewQuestionsFromResume(
     try {
         const fileBuffer = await file.arrayBuffer();
         
-        // The AI can handle the raw file buffer, but we'll pass it as a data URI
         const resumeDataUri = `data:${file.type};base64,${Buffer.from(fileBuffer).toString('base64')}`;
 
         const questions = await conductInterview({ resumeDataUri });
