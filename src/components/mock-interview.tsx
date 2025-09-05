@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -102,15 +103,7 @@ export default function MockInterview() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (["application/pdf", "text/plain", "text/markdown"].includes(file.type)) {
-        setResume(file);
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Invalid file type",
-          description: "Please upload a PDF, TXT, or MD file.",
-        });
-      }
+      setResume(file);
     }
   };
 
@@ -157,27 +150,26 @@ export default function MockInterview() {
     const videoBlob = await stopRecording();
     if (videoBlob) {
       setIsAnalyzing(true);
-      const reader = new FileReader();
-      reader.readAsDataURL(videoBlob);
-      reader.onloadend = async () => {
-        const videoDataUri = reader.result as string;
-        try {
-          const feedback = await getVideoFeedback({ videoDataUri, question });
-          setFeedbackResults(prev => [...prev, { ...feedback, question }]);
-        } catch (error) {
-          toast({
-            variant: "destructive",
-            title: "Analysis Failed",
-            description: "Could not analyze your response for this question.",
-          });
-        } finally {
-          setIsAnalyzing(false);
-          // Start recording for the next question if there is one
-          if (interviewState && currentQuestionIndex < interviewState.initialQuestions.length - 1) {
-            startRecording();
-          }
-        }
-      };
+      return new Promise<void>((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(videoBlob);
+        reader.onloadend = async () => {
+            const videoDataUri = reader.result as string;
+            try {
+              const feedback = await getVideoFeedback({ videoDataUri, question });
+              setFeedbackResults(prev => [...prev, { ...feedback, question }]);
+            } catch (error) {
+              toast({
+                variant: "destructive",
+                title: "Analysis Failed",
+                description: "Could not analyze your response for this question.",
+              });
+            } finally {
+              setIsAnalyzing(false);
+              resolve();
+            }
+        };
+      });
     }
   };
 
@@ -185,6 +177,7 @@ export default function MockInterview() {
     if (interviewState && currentQuestionIndex < interviewState.initialQuestions.length - 1) {
       await processVideoAndGetFeedback(interviewState.initialQuestions[currentQuestionIndex].question);
       setCurrentQuestionIndex(prev => prev + 1);
+      startRecording();
     }
   };
 
@@ -265,7 +258,7 @@ export default function MockInterview() {
             <CardContent className="space-y-6">
               <div className="grid w-full max-w-sm items-center gap-1.5 mx-auto">
                 <Label htmlFor="resume">Resume (PDF, TXT, MD)</Label>
-                <Input id="resume" type="file" accept=".pdf,.txt,.md" onChange={handleFileChange} disabled={isLoading} />
+                <Input id="resume" type="file" accept=".pdf,.txt,.md,.doc,.docx" onChange={handleFileChange} disabled={isLoading} />
               </div>
               {resume && (
                 <p className="text-sm text-muted-foreground text-center">Selected file: {resume.name}</p>
