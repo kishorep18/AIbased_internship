@@ -2,6 +2,7 @@
 
 import { recommendInternships, type RecommendInternshipsInput, type RecommendInternshipsOutput } from "@/ai/flows/recommend-internships";
 import { conductInterview, type ConductInterviewInput, type ConductInterviewOutput } from "@/ai/flows/mock-interview";
+import pdf from "pdf-parse";
 
 export async function getInternshipRecommendations(
   data: RecommendInternshipsInput
@@ -32,4 +33,39 @@ export async function getInterviewQuestions(
     console.error("Error getting interview questions:", error);
     throw new Error("Failed to get interview questions from AI service.");
   }
+}
+
+export async function getInterviewQuestionsFromResume(
+  formData: FormData
+): Promise<ConductInterviewOutput> {
+    const file = formData.get('resume') as File;
+    if (!file) {
+        throw new Error("No resume file found");
+    }
+
+    try {
+        const fileBuffer = Buffer.from(await file.arrayBuffer());
+        let resumeText: string;
+
+        if (file.type === 'application/pdf') {
+            const data = await pdf(fileBuffer);
+            resumeText = data.text;
+        } else {
+            resumeText = fileBuffer.toString('utf-8');
+        }
+
+        if (!resumeText) {
+             return { initialQuestions: [] };
+        }
+
+        const questions = await conductInterview({ resumeText });
+         if (!questions?.initialQuestions?.length) {
+            return { initialQuestions: [] };
+        }
+        return questions;
+
+    } catch (error) {
+        console.error("Error processing resume:", error);
+        throw new Error("Failed to process resume and get interview questions.");
+    }
 }

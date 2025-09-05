@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import type { ConductInterviewOutput } from "@/ai/flows/mock-interview";
-import { getInterviewQuestions } from "@/app/actions";
+import { getInterviewQuestionsFromResume } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Upload, Bot, User } from "lucide-react";
+import { Loader2, Upload, Bot } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default function MockInterview() {
@@ -20,7 +20,6 @@ export default function MockInterview() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Allow PDF, text, and markdown files
       if (["application/pdf", "text/plain", "text/markdown"].includes(file.type)) {
         setResume(file);
       } else {
@@ -45,53 +44,28 @@ export default function MockInterview() {
 
     setIsLoading(true);
     setInterviewState(null);
-
-    // We need to read the file content as text.
-    // PDFs are tricky on the client, so we will show a message for now.
-    // In a real app, you'd use a library like pdf.js or do this on the server.
-    if (resume.type === 'application/pdf') {
-       toast({
-          variant: "destructive",
-          title: "PDF processing not supported yet",
-          description: "Please use a .txt or .md file for now. PDF analysis is coming soon!",
-        });
-      setIsLoading(false);
-      return;
-    }
     
-    const reader = new FileReader();
-    reader.readAsText(resume);
-    reader.onload = async (e) => {
-        const resumeText = e.target?.result as string;
-        if (!resumeText) {
-            toast({ variant: "destructive", title: "Could not read resume file." });
-            setIsLoading(false);
-            return;
-        }
+    const formData = new FormData();
+    formData.append('resume', resume);
 
-        try {
-            const result = await getInterviewQuestions({ resumeText });
-            if (result.initialQuestions.length === 0) {
-                toast({
-                    title: "Could not generate questions",
-                    description: "The AI could not generate questions from your resume. Please try a different file.",
-                });
-            }
-            setInterviewState(result);
-        } catch (error) {
+    try {
+        const result = await getInterviewQuestionsFromResume(formData);
+        if (result.initialQuestions.length === 0) {
             toast({
-                variant: "destructive",
-                title: "An error occurred",
-                description: "Failed to start interview. Please try again later.",
+                title: "Could not generate questions",
+                description: "The AI could not generate questions from your resume. Please try a different file.",
             });
-        } finally {
-            setIsLoading(false);
         }
-    };
-    reader.onerror = () => {
-        toast({ variant: "destructive", title: "Error reading file" });
+        setInterviewState(result);
+    } catch (error) {
+        toast({
+            variant: "destructive",
+            title: "An error occurred",
+            description: "Failed to start interview. Please try again later.",
+        });
+    } finally {
         setIsLoading(false);
-    };
+    }
   };
 
   return (
