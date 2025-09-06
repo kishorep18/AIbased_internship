@@ -6,3 +6,4 @@ import '@/ai/flows/mock-interview.ts';
 import '@/ai/flows/text-to-speech.ts';
 import '@/ai/flows/analyze-video-feedback.ts';
 import '@/ai/flows/generate-aptitude-quiz.ts';
+import '@/ai/flows/generate-roadmap.ts';

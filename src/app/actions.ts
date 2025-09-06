@@ -5,6 +5,7 @@ import { conductInterview, type ConductInterviewInput, type ConductInterviewOutp
 import { textToSpeech, type TextToSpeechInput, type TextToSpeechOutput } from "@/ai/flows/text-to-speech";
 import { analyzeVideoFeedback, type AnalyzeVideoFeedbackInput, type AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedback";
 import { generateAptitudeQuiz, type GenerateAptitudeQuizInput, type GenerateAptitudeQuizOutput } from "@/ai/flows/generate-aptitude-quiz";
+import { generateRoadmap, type GenerateRoadmapInput, type GenerateRoadmapOutput } from "@/ai/flows/generate-roadmap";
 
 export async function getInternshipRecommendations(
   data: RecommendInternshipsInput
@@ -98,5 +99,20 @@ export async function getAptitudeQuiz(
     } catch (error) {
         console.error("Error getting aptitude quiz:", error);
         throw new Error("Failed to get aptitude quiz from AI service.");
+    }
+}
+
+export async function getRoadmap(
+    data: GenerateRoadmapInput
+): Promise<GenerateRoadmapOutput> {
+    try {
+        const roadmap = await generateRoadmap(data);
+        if (!roadmap?.roadmap?.length) {
+            return { roadmap: [] };
+        }
+        return roadmap;
+    } catch (error) {
+        console.error("Error getting roadmap:", error);
+        throw new Error("Failed to get roadmap from AI service.");
     }
 }
