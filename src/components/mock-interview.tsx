@@ -257,8 +257,8 @@ export default function MockInterview() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid w-full max-w-sm items-center gap-1.5 mx-auto">
-                <Label htmlFor="resume">Resume (PDF, TXT, MD)</Label>
-                <Input id="resume" type="file" accept=".pdf,.txt,.md,.doc,.docx" onChange={handleFileChange} disabled={isLoading} />
+                <Label htmlFor="resume">Resume (PDF, DOC, DOCX, TXT, MD)</Label>
+                <Input id="resume" type="file" accept=".pdf,.doc,.docx,.txt,.md" onChange={handleFileChange} disabled={isLoading} />
               </div>
               {resume && (
                 <p className="text-sm text-muted-foreground text-center">Selected file: {resume.name}</p>
