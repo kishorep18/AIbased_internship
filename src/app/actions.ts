@@ -1,3 +1,4 @@
+
 "use server";
 
 import { recommendInternships, type RecommendInternshipsInput, type RecommendInternshipsOutput } from "@/ai/flows/recommend-internships";
@@ -6,7 +7,7 @@ import { textToSpeech, type TextToSpeechInput, type TextToSpeechOutput } from "@
 import { analyzeVideoFeedback, type AnalyzeVideoFeedbackInput, type AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedback";
 import { generateAptitudeQuiz, type GenerateAptitudeQuizInput, type GenerateAptitudeQuizOutput } from "@/ai/flows/generate-aptitude-quiz";
 import { generateRoadmap, type GenerateRoadmapInput, type GenerateRoadmapOutput } from "@/ai/flows/generate-roadmap";
-import pdf from "pdf-parse";
+
 
 export async function getInternshipRecommendations(
   data: RecommendInternshipsInput
@@ -52,6 +53,7 @@ export async function getInterviewQuestionsFromResume(
         let resumeText = '';
 
         if (file.type === 'application/pdf') {
+          const pdf = (await import('pdf-parse')).default;
           const pdfData = await pdf(Buffer.from(fileBuffer));
           resumeText = pdfData.text;
         } else if (file.type === 'text/plain' || file.type === 'text/markdown') {
