@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -176,9 +175,6 @@ export default function RoadmapGenerator() {
                                                 {step.title}
                                             </CardTitle>
                                         </CardHeader>
-                                        <CardContent>
-                                            <p className="text-muted-foreground">{step.description}</p>
-                                        </CardContent>
                                     </Card>
                                 </div>
                             );
