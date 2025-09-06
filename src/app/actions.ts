@@ -59,8 +59,6 @@ export async function getInterviewQuestionsFromResume(
         } else if (file.type === 'text/plain' || file.type === 'text/markdown') {
           resumeText = fileBuffer.toString('utf8');
         } else {
-            // For other file types like doc/docx, you would need a different library.
-            // For now, we will throw an error.
             throw new Error(`Unsupported file type: ${file.type}. Please upload a PDF, TXT, or MD file.`);
         }
         
