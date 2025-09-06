@@ -6,11 +6,14 @@ import MockInterview from '@/components/mock-interview';
 import { GraduationCap, Briefcase, LogIn, LogOut, UserCircle, FileText, Route } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 
 export default function MockInterviewPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const pathname = usePathname();
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem('isLoggedIn');
@@ -29,6 +32,12 @@ export default function MockInterviewPage() {
     window.location.reload();
   };
   
+  const navLinks = [
+    { href: '/mock-interview', label: 'Mock Interview', icon: Briefcase },
+    { href: '/roadmap', label: 'Roadmap', icon: Route },
+    { href: '/aptitude-quiz', label: 'Aptitude Quiz', icon: FileText },
+  ];
+
   return (
     <div className="flex flex-col min-h-dvh bg-background font-body">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -41,31 +50,25 @@ export default function MockInterviewPage() {
               </span>
             </Link>
           </div>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
-             <Link
-              className="transition-colors hover:text-foreground/80 text-foreground"
-              href="/mock-interview"
-            >
-              <Briefcase className="inline-block mr-2 h-5 w-5" />
-              Mock Interview
-            </Link>
-            <Link
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-              href="/roadmap"
-            >
-              <Route className="inline-block mr-2 h-5 w-5" />
-              Roadmap
-            </Link>
-            <Link
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-              href="/aptitude-quiz"
-            >
-              <FileText className="inline-block mr-2 h-5 w-5" />
-              Aptitude Quiz
-            </Link>
-             {isLoggedIn ? (
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                className={cn(
+                  "transition-colors hover:text-foreground/80",
+                  pathname === link.href ? "text-foreground" : "text-foreground/60"
+                )}
+                href={link.href}
+              >
+                <link.icon className="inline-block mr-2 h-5 w-5" />
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center gap-4">
+            {isLoggedIn ? (
               <div className="flex items-center gap-4">
-                 <div className="flex items-center gap-2">
+                 <div className="hidden sm:flex items-center gap-2">
                     <UserCircle className="h-5 w-5 text-primary" />
                     <span className="text-foreground/80">{userEmail}</span>
                 </div>
@@ -76,14 +79,17 @@ export default function MockInterviewPage() {
               </div>
             ) : (
               <Link
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
                 href="/login"
+                 className={cn(
+                  "transition-colors hover:text-foreground/80",
+                  pathname === "/login" ? "text-foreground" : "text-foreground/60"
+                )}
               >
                 <LogIn className="inline-block mr-2 h-5 w-5" />
                 Login
               </Link>
             )}
-          </nav>
+          </div>
         </div>
       </header>
       <main className="flex-1">
