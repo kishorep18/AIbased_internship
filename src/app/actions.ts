@@ -6,6 +6,7 @@ import { textToSpeech, type TextToSpeechInput, type TextToSpeechOutput } from "@
 import { analyzeVideoFeedback, type AnalyzeVideoFeedbackInput, type AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedback";
 import { generateAptitudeQuiz, type GenerateAptitudeQuizInput, type GenerateAptitudeQuizOutput } from "@/ai/flows/generate-aptitude-quiz";
 import { generateRoadmap, type GenerateRoadmapInput, type GenerateRoadmapOutput } from "@/ai/flows/generate-roadmap";
+import pdf from "pdf-parse";
 
 export async function getInternshipRecommendations(
   data: RecommendInternshipsInput
@@ -48,10 +49,24 @@ export async function getInterviewQuestionsFromResume(
 
     try {
         const fileBuffer = await file.arrayBuffer();
-        
-        const resumeDataUri = `data:${file.type};base64,${Buffer.from(fileBuffer).toString('base64')}`;
+        let resumeText = '';
 
-        const questions = await conductInterview({ resumeDataUri });
+        if (file.type === 'application/pdf') {
+          const pdfData = await pdf(Buffer.from(fileBuffer));
+          resumeText = pdfData.text;
+        } else if (file.type === 'text/plain' || file.type === 'text/markdown') {
+          resumeText = Buffer.from(fileBuffer).toString('utf8');
+        } else {
+            // For other file types like doc/docx, you would need a different library.
+            // For now, we will throw an error.
+            throw new Error(`Unsupported file type: ${file.type}. Please upload a PDF, TXT, or MD file.`);
+        }
+        
+        if (!resumeText.trim()) {
+            throw new Error("Could not extract text from the resume.");
+        }
+        
+        const questions = await conductInterview({ resumeText });
          if (!questions?.initialQuestions?.length) {
             return { initialQuestions: [] };
         }

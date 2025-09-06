@@ -12,7 +12,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ConductInterviewInputSchema = z.object({
-  resumeDataUri: z.string().describe("A data URI of the candidate's resume (PDF, TXT, etc.). It must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."),
+  resumeText: z.string().describe("The text content of the candidate's resume."),
 });
 export type ConductInterviewInput = z.infer<typeof ConductInterviewInputSchema>;
 
@@ -36,15 +36,15 @@ const prompt = ai.definePrompt({
   output: {schema: ConductInterviewOutputSchema},
   prompt: `You are an expert technical recruiter and interviewer. Your task is to conduct a mock interview with a candidate based on their resume.
 
-  Analyze the following resume and generate 5 initial interview questions. The questions should be a mix of:
+  Analyze the following resume text and generate 5 initial interview questions. The questions should be a mix of:
   1.  Questions directly related to the projects and experiences listed in the resume.
   2.  Technical questions based on the skills mentioned (e.g., programming languages, frameworks).
   3.  General industry-based questions relevant to the roles the candidate seems to be targeting.
   4.  Behavioral questions.
 
-  Candidate's Resume:
+  Candidate's Resume Text:
   ---
-  {{media url=resumeDataUri}}
+  {{{resumeText}}}
   ---
 
   Please provide 5 diverse and insightful questions to start the interview. Categorize each question.
