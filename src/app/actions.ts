@@ -4,6 +4,7 @@ import { recommendInternships, type RecommendInternshipsInput, type RecommendInt
 import { conductInterview, type ConductInterviewInput, type ConductInterviewOutput } from "@/ai/flows/mock-interview";
 import { textToSpeech, type TextToSpeechInput, type TextToSpeechOutput } from "@/ai/flows/text-to-speech";
 import { analyzeVideoFeedback, type AnalyzeVideoFeedbackInput, type AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedback";
+import { generateAptitudeQuiz, type GenerateAptitudeQuizInput, type GenerateAptitudeQuizOutput } from "@/ai/flows/generate-aptitude-quiz";
 
 export async function getInternshipRecommendations(
   data: RecommendInternshipsInput
@@ -83,4 +84,19 @@ export async function getVideoFeedback(
     console.error("Error getting video feedback:", error);
     throw new Error("Failed to get video feedback from AI service.");
   }
+}
+
+export async function getAptitudeQuiz(
+    data: GenerateAptitudeQuizInput
+): Promise<GenerateAptitudeQuizOutput> {
+    try {
+        const quiz = await generateAptitudeQuiz(data);
+        if (!quiz?.quiz?.questions?.length) {
+            return { quiz: { companyName: data.companyName, questions: [] } };
+        }
+        return quiz;
+    } catch (error) {
+        console.error("Error getting aptitude quiz:", error);
+        throw new Error("Failed to get aptitude quiz from AI service.");
+    }
 }
