@@ -163,7 +163,7 @@ export default function RoadmapGenerator() {
                             const Icon = stepIcons[index] || Trophy;
                             const isEven = index % 2 === 0;
                             return (
-                                <div key={step.step} className={`relative flex items-center ${isEven ? 'justify-start' : 'justify-end'}`}>
+                                <div key={step.step} className={`relative flex items-start ${isEven ? 'justify-start' : 'justify-end'}`}>
                                     <div className={`w-[calc(50%-2.5rem)] ${isEven ? 'order-1' : 'order-3'}`}></div>
                                     <div className={`absolute left-1/2 -translate-x-1/2 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground`}>
                                         <Icon className="w-5 h-5"/>
@@ -175,6 +175,9 @@ export default function RoadmapGenerator() {
                                                 {step.title}
                                             </CardTitle>
                                         </CardHeader>
+                                        <CardContent>
+                                            <p className="text-muted-foreground text-sm line-clamp-2">{step.description}</p>
+                                        </CardContent>
                                     </Card>
                                 </div>
                             );
