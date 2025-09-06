@@ -9,6 +9,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -170,7 +171,7 @@ export default function RoadmapGenerator() {
                             }}
                           >
                             <div
-                              className={`relative p-6 rounded-t-lg shadow-lg mb-1 flex items-start gap-6`}
+                              className={`relative p-6 rounded-t-lg shadow-lg mb-1 flex items-center gap-6`}
                               style={{ 
                                 backgroundColor: `hsl(var(--primary) / ${1 - index * 0.1})`,
                                 clipPath: 'polygon(0 0, 100% 0, 100% 100%, 10% 100%, 0 80%)'
@@ -183,8 +184,7 @@ export default function RoadmapGenerator() {
                                     <div className="text-center text-white font-bold mt-2">STEP {step.step}</div>
                                 </div>
                                 <div className="text-white">
-                                    <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-                                    <p className="text-sm opacity-90">{step.description}</p>
+                                    <h3 className="text-xl font-bold">{step.title}</h3>
                                 </div>
                             </div>
                           </div>
