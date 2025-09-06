@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -156,45 +157,36 @@ export default function RoadmapGenerator() {
                     </CardHeader>
                 </Card>
 
-                <div className="flex flex-col items-center">
-                  <div className="relative w-full p-8">
-                    <div className="flex flex-col-reverse w-full">
-                      {roadmapData?.roadmap.map((step, index) => {
-                        const Icon = stepIcons[index] || Trophy;
-                        return (
-                          <div
-                            key={step.step}
-                            className="transform transition-all duration-300 ease-in-out hover:scale-105"
-                            style={{
-                              paddingLeft: `${index * 8}%`,
-                              zIndex: roadmapData.roadmap.length - index,
-                            }}
-                          >
-                            <div
-                              className={`relative p-6 rounded-t-lg shadow-lg mb-1 flex items-center gap-6`}
-                              style={{ 
-                                backgroundColor: `hsl(var(--primary) / ${1 - index * 0.1})`,
-                                clipPath: 'polygon(0 0, 100% 0, 100% 100%, 10% 100%, 0 80%)'
-                              }}
-                            >
-                                <div className="flex-shrink-0">
-                                    <div className="flex items-center justify-center w-12 h-12 bg-background/20 rounded-full text-white">
-                                        <Icon className="w-6 h-6" />
+                <div className="relative">
+                    <div className="absolute left-1/2 -translate-x-1/2 h-full w-0.5 bg-border"></div>
+                    <div className="space-y-12">
+                        {roadmapData?.roadmap.map((step, index) => {
+                            const Icon = stepIcons[index] || Trophy;
+                            const isEven = index % 2 === 0;
+                            return (
+                                <div key={step.step} className={`relative flex items-center ${isEven ? 'justify-start' : 'justify-end'}`}>
+                                    <div className={`w-[calc(50%-2.5rem)] ${isEven ? 'order-1' : 'order-3'}`}></div>
+                                    <div className={`absolute left-1/2 -translate-x-1/2 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-primary text-primary-foreground`}>
+                                        <Icon className="w-5 h-5"/>
                                     </div>
-                                    <div className="text-center text-white font-bold mt-2">STEP {step.step}</div>
+                                    <Card className={`w-1/2 shadow-xl ${isEven ? 'order-2' : 'order-2'}`}>
+                                        <CardHeader>
+                                            <CardTitle className="text-xl font-headline">
+                                                <span className="text-sm text-muted-foreground mr-2">STEP {step.step}</span>
+                                                {step.title}
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <p className="text-muted-foreground">{step.description}</p>
+                                        </CardContent>
+                                    </Card>
                                 </div>
-                                <div className="text-white">
-                                    <h3 className="text-xl font-bold">{step.title}</h3>
-                                </div>
-                            </div>
-                          </div>
-                        );
-                      })}
+                            );
+                        })}
                     </div>
-                  </div>
                 </div>
 
-                 <div className="text-center pt-8">
+                <div className="text-center pt-8">
                     <Button onClick={restart} size="lg">
                         <Sparkles className="mr-2 h-4 w-4" />
                         Generate Another Roadmap
