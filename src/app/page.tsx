@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import InternshipFinder from '@/components/internship-finder';
-import { GraduationCap, Briefcase, LogIn, LogOut, UserCircle, FileText } from 'lucide-react';
+import { GraduationCap, Briefcase, LogIn, LogOut, UserCircle, FileText, Route } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -47,6 +47,13 @@ export default function Home() {
             >
               <Briefcase className="inline-block mr-2 h-5 w-5" />
               Mock Interview
+            </Link>
+            <Link
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              href="/roadmap"
+            >
+              <Route className="inline-block mr-2 h-5 w-5" />
+              Roadmap
             </Link>
              <Link
               className="transition-colors hover:text-foreground/80 text-foreground/60"
