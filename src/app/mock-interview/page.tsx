@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import MockInterview from '@/components/mock-interview';
-import { GraduationCap, Briefcase, LogIn, LogOut, UserCircle } from 'lucide-react';
+import { GraduationCap, Briefcase, LogIn, LogOut, UserCircle, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -48,6 +48,13 @@ export default function MockInterviewPage() {
             >
               <Briefcase className="inline-block mr-2 h-5 w-5" />
               Mock Interview
+            </Link>
+            <Link
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+              href="/aptitude-quiz"
+            >
+              <FileText className="inline-block mr-2 h-5 w-5" />
+              Aptitude Quiz
             </Link>
              {isLoggedIn ? (
               <div className="flex items-center gap-4">
