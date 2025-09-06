@@ -49,15 +49,15 @@ export async function getInterviewQuestionsFromResume(
     }
 
     try {
-        const fileBuffer = await file.arrayBuffer();
+        const fileBuffer = Buffer.from(await file.arrayBuffer());
         let resumeText = '';
 
         if (file.type === 'application/pdf') {
           const pdf = (await import('pdf-parse')).default;
-          const pdfData = await pdf(Buffer.from(fileBuffer));
+          const pdfData = await pdf(fileBuffer);
           resumeText = pdfData.text;
         } else if (file.type === 'text/plain' || file.type === 'text/markdown') {
-          resumeText = Buffer.from(fileBuffer).toString('utf8');
+          resumeText = fileBuffer.toString('utf8');
         } else {
             // For other file types like doc/docx, you would need a different library.
             // For now, we will throw an error.
