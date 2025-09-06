@@ -3,33 +3,13 @@
 
 import { useState, useEffect } from 'react';
 import RoadmapGenerator from '@/components/roadmap-generator';
-import { GraduationCap, Briefcase, LogIn, LogOut, UserCircle, FileText, Route } from 'lucide-react';
+import { GraduationCap, Briefcase, FileText, Route } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 export default function RoadmapPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
   const pathname = usePathname();
-
-  useEffect(() => {
-    const loggedInStatus = localStorage.getItem('isLoggedIn');
-    const email = localStorage.getItem('userEmail');
-    if (loggedInStatus === 'true' && email) {
-      setIsLoggedIn(true);
-      setUserEmail(email);
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userEmail');
-    setIsLoggedIn(false);
-    setUserEmail('');
-    window.location.reload();
-  };
   
   const navLinks = [
     { href: '/mock-interview', label: 'Mock Interview', icon: Briefcase },
@@ -65,29 +45,7 @@ export default function RoadmapPage() {
             ))}
           </nav>
           <div className="flex items-center gap-4">
-             {isLoggedIn ? (
-              <div className="flex items-center gap-4">
-                 <div className="hidden sm:flex items-center gap-2">
-                    <UserCircle className="h-5 w-5 text-primary" />
-                    <span className="text-foreground/80">{userEmail}</span>
-                </div>
-                <Button variant="ghost" onClick={handleLogout} className="text-foreground/60 hover:text-foreground/80">
-                  <LogOut className="inline-block mr-2 h-5 w-5" />
-                  Logout
-                </Button>
-              </div>
-            ) : (
-              <Link
-                href="/login"
-                className={cn(
-                  "transition-colors hover:text-foreground/80",
-                  pathname === "/login" ? "text-foreground" : "text-foreground/60"
-                )}
-              >
-                <LogIn className="inline-block mr-2 h-5 w-5" />
-                Login
-              </Link>
-            )}
+            
           </div>
         </div>
       </header>

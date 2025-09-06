@@ -1,4 +1,4 @@
-import { LoginForm } from '@/components/login-form';
+
 import { GraduationCap } from 'lucide-react';
 import Link from 'next/link';
 
@@ -18,7 +18,7 @@ export default function LoginPage() {
         </div>
       </header>
       <main className="flex-1 flex items-center justify-center">
-        <LoginForm />
+        <div>Login has been removed.</div>
       </main>
       <footer className="py-6 md:px-8 md:py-0">
         <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">
