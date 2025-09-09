@@ -72,9 +72,10 @@ export async function getInterviewQuestionsFromResume(
         }
         return questions;
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error processing resume:", error);
-        throw new Error("Failed to process resume and get interview questions.");
+        // Pass the specific error message to the client
+        throw new Error(error.message || "Failed to process resume and get interview questions.");
     }
 }
 

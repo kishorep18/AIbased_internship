@@ -17,6 +17,12 @@ import { FeedbackCard } from "@/components/feedback-card";
 
 type FeedbackWithQuestion = AnalyzeVideoFeedbackOutput & { question: string };
 
+const ACCEPTED_FILE_TYPES = {
+  'application/pdf': ['.pdf'],
+  'text/plain': ['.txt'],
+  'text/markdown': ['.md'],
+};
+
 export default function MockInterview() {
   const [resume, setResume] = useState<File | null>(null);
   const [interviewState, setInterviewState] = useState<ConductInterviewOutput | null>(null);
@@ -103,7 +109,17 @@ export default function MockInterview() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setResume(file);
+      if (Object.keys(ACCEPTED_FILE_TYPES).includes(file.type)) {
+        setResume(file);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Invalid File Type",
+          description: "Please upload a PDF, TXT, or MD file.",
+        });
+        setResume(null);
+        event.target.value = ''; // Reset the input
+      }
     }
   };
 
@@ -258,7 +274,7 @@ export default function MockInterview() {
             <CardContent className="space-y-6">
               <div className="grid w-full max-w-sm items-center gap-1.5 mx-auto">
                 <Label htmlFor="resume">Resume (PDF, TXT, MD)</Label>
-                <Input id="resume" type="file" accept=".pdf,.txt,.md" onChange={handleFileChange} disabled={isLoading} />
+                <Input id="resume" type="file" accept={Object.values(ACCEPTED_FILE_TYPES).flat().join(',')} onChange={handleFileChange} disabled={isLoading} />
               </div>
               {resume && (
                 <p className="text-sm text-muted-foreground text-center">Selected file: {resume.name}</p>
