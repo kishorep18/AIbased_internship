@@ -40,47 +40,6 @@ export async function getInterviewQuestions(
   }
 }
 
-export async function getInterviewQuestionsFromResume(
-  formData: FormData
-): Promise<ConductInterviewOutput> {
-    const file = formData.get('resume') as File;
-    if (!file) {
-        throw new Error("No resume file found");
-    }
-
-    try {
-        const fileBuffer = Buffer.from(await file.arrayBuffer());
-        let resumeText = '';
-
-        if (file.type === 'application/pdf') {
-          // Dynamically import pdf-parse only when needed.
-          const pdf = (await import('pdf-parse')).default;
-          const data = await pdf(fileBuffer);
-          resumeText = data.text;
-        } else if (file.type === 'text/plain' || file.type === 'text/markdown') {
-          resumeText = fileBuffer.toString('utf8');
-        } else {
-            throw new Error(`Unsupported file type: ${file.type}. Please upload a PDF, TXT, or MD file.`);
-        }
-        
-        if (!resumeText.trim()) {
-            throw new Error("Could not extract text from the resume. The file might be empty or corrupted.");
-        }
-        
-        const questions = await conductInterview({ resumeText });
-         if (!questions?.initialQuestions?.length) {
-            return { initialQuestions: [] };
-        }
-        return questions;
-
-    } catch (error: any) {
-        console.error("Error processing resume:", error);
-        // Pass the specific error message to the client
-        throw new Error(error.message || "Failed to process resume and get interview questions.");
-    }
-}
-
-
 export async function getAudioForText(
   text: TextToSpeechInput
 ): Promise<TextToSpeechOutput> {
