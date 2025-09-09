@@ -64,7 +64,7 @@ export async function getInterviewQuestionsFromResume(
         }
         
         if (!resumeText.trim()) {
-            throw new Error("Could not extract text from the resume.");
+            throw new Error("Could not extract text from the resume. The file might be empty or corrupted.");
         }
         
         const questions = await conductInterview({ resumeText });
