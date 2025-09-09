@@ -54,8 +54,8 @@ export async function getInterviewQuestionsFromResume(
 
         if (file.type === 'application/pdf') {
           const pdf = (await import('pdf-parse')).default;
-          const pdfData = await pdf(fileBuffer);
-          resumeText = pdfData.text;
+          const data = await pdf(fileBuffer);
+          resumeText = data.text;
         } else if (file.type === 'text/plain' || file.type === 'text/markdown') {
           resumeText = fileBuffer.toString('utf8');
         } else {
