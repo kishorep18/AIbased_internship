@@ -53,6 +53,7 @@ export async function getInterviewQuestionsFromResume(
         let resumeText = '';
 
         if (file.type === 'application/pdf') {
+          // Dynamically import pdf-parse only when needed.
           const pdf = (await import('pdf-parse')).default;
           const data = await pdf(fileBuffer);
           resumeText = data.text;
