@@ -22,7 +22,7 @@ export default function InternshipFinder() {
       if (result.internshipRecommendations.length === 0) {
         toast({
             title: "No matches found",
-            description: "We couldn't find internships matching your profile. Try adjusting your preferences.",
+            description: "We couldn't find internships matching your profile on the PM Internship Portal. Try adjusting your preferences.",
         });
       }
       setRecommendations(result);
@@ -44,7 +44,7 @@ export default function InternshipFinder() {
           Find Your Perfect Internship
         </h1>
         <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Tell us about yourself, and our AI will suggest the most relevant internships for you from hundreds of opportunities.
+          Tell us about yourself, and our AI will suggest relevant internships from the official PM Internship Portal.
         </p>
       </section>
 

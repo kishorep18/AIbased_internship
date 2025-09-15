@@ -27,11 +27,11 @@ const RecommendInternshipsOutputSchema = z.object({
   internshipRecommendations: z.array(
     z.object({
       title: z.string().describe('The title of the internship.'),
-      company: z.string().describe('The company offering the internship.'),
+      company: z.string().describe('The company or ministry offering the internship.'),
       description: z.string().describe('A brief description of the internship.'),
       location: z.string().describe('The location of the internship.'),
       relevanceScore: z.number().describe('A score from 0 to 1 indicating the relevance of the internship to the candidate.'),
-      applyUrl: z.string().url().describe('A URL to apply for the internship. This should be a direct link to a job posting if possible, otherwise a company career page.'),
+      applyUrl: z.string().url().describe('A URL to apply for the internship. This should be a direct link to the internship on the pminternship.mca.gov.in portal.'),
     })
   ).describe('A list of recommended internships.'),
 });
@@ -45,7 +45,9 @@ const prompt = ai.definePrompt({
   name: 'recommendInternshipsPrompt',
   input: {schema: RecommendInternshipsInputSchema},
   output: {schema: RecommendInternshipsOutputSchema},
-  prompt: `You are an AI career advisor that finds and recommends 3-5 internships to a candidate based on their profile.
+  prompt: `You are an AI career advisor that finds and recommends 3-5 internships to a candidate based on their profile, exclusively from the PM Internship Portal.
+
+  The portal is located at: https://pminternship.mca.gov.in/
 
   Candidate Profile:
   - Name: {{{name}}}
@@ -58,10 +60,10 @@ const prompt = ai.definePrompt({
 
   Your task is to:
   1. Analyze the candidate's profile.
-  2. Imagine you are searching across the web for relevant internship opportunities.
-  3. Provide 3-5 diverse internship recommendations that are the most relevant. The internships should be from real, well-known companies.
+  2. Imagine you are searching the PM Internship Portal (https://pminternship.mca.gov.in/) for relevant internship opportunities.
+  3. Provide 3-5 diverse internship recommendations that are the most relevant from that specific portal.
 
-  For each recommendation, provide the title, a plausible company, a realistic description, the location, a relevanceScore (from 0 to 1), and a valid applyUrl. The applyUrl should be a link to a plausible career page or job listing for the company mentioned.
+  For each recommendation, provide the title, a plausible company/ministry, a realistic description based on opportunities on the portal, the location, a relevanceScore (from 0 to 1), and a valid applyUrl. The applyUrl MUST be a plausible link to an internship listing on the pminternship.mca.gov.in domain.
   `,
 });
 
@@ -76,3 +78,4 @@ const recommendInternshipsFlow = ai.defineFlow(
     return output!;
   }
 );
+
