@@ -56,12 +56,6 @@ export default function MockInterviewPage() {
               <form action={signOutUser}>
                 <Button variant="outline" type="submit">Sign Out</Button>
               </form>
-            ) : !loading ? (
-              <>
-                <Button asChild variant="outline">
-                  <Link href="/login">Login</Link>
-                </Button>
-              </>
             ) : null}
           </div>
         </div>
