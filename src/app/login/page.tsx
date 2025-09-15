@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { signInWithEmail } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { GraduationCap } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email('Please enter a valid email address.'),
@@ -33,12 +34,13 @@ type State = {
 export default function LoginPage() {
   const [state, formAction] = useActionState<State, FormData>(signInWithEmail, null);
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: 'kishore@gmail.com',
-      password: 'Kishore@123',
+      email: 'web@gmail.com',
+      password: 'server',
     },
   });
 
@@ -50,7 +52,7 @@ export default function LoginPage() {
         description: state.issues.join('\n'),
       });
     }
-  }, [state, toast]);
+  }, [state, toast, router]);
 
   return (
     <div className="flex flex-col min-h-dvh bg-background font-body">
@@ -83,7 +85,7 @@ export default function LoginPage() {
                   name="email"
                   type="email"
                   placeholder="m@example.com"
-                  defaultValue="kishore@gmail.com"
+                  defaultValue="web@gmail.com"
                   required
                 />
               </div>
@@ -91,7 +93,7 @@ export default function LoginPage() {
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" name="password" type="password" defaultValue="Kishore@123" required />
+                <Input id="password" name="password" type="password" defaultValue="server" required />
               </div>
               <Button type="submit" className="w-full">
                 Login
