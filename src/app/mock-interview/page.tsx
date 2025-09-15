@@ -3,21 +3,13 @@
 
 import { useState, useEffect } from 'react';
 import MockInterview from '@/components/mock-interview';
-import { GraduationCap, Briefcase, FileText, Route, Home as HomeIcon, Bot, LogOut } from 'lucide-react';
+import { GraduationCap, Briefcase, FileText, Route, Home as HomeIcon, Bot, LogOut, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { signOutUser } from '@/app/actions';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
@@ -61,33 +53,24 @@ export default function MockInterviewPage() {
             ))}
           </nav>
           <div className="flex items-center gap-4">
-          {!loading && user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="overflow-hidden rounded-full"
-                  >
-                    <Avatar>
-                      <AvatarImage src={user.photoURL ?? ''} alt="User Avatar" />
-                      <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
-                    </Avatar>
+            {!loading && user ? (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={user.photoURL ?? ''} alt="User Avatar" />
+                    <AvatarFallback>
+                      {user.email?.[0].toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm font-medium hidden sm:inline">{user.displayName || 'User'}</span>
+                </div>
+                <form action={signOutUser}>
+                  <Button variant="ghost" size="sm" type="submit">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Log Out
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <form action={signOutUser}>
-                    <DropdownMenuItem asChild>
-                      <button type="submit" className="w-full text-left">
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Sign Out
-                      </button>
-                    </DropdownMenuItem>
-                  </form>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                </form>
+              </div>
             ) : null}
           </div>
         </div>
