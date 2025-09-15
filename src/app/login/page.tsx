@@ -41,7 +41,7 @@ export default function LoginPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: 'kishore@gmail.com',
-      password: 'kishore@2006',
+      password: 'Kishore@2006',
     },
   });
 
@@ -77,18 +77,18 @@ export default function LoginPage() {
           <CardHeader>
             <CardTitle className="text-2xl">Login</CardTitle>
             <CardDescription>
-              Enter your email below to login to your account
+              Enter your username below to login to your account
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form action={formAction} className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Username</Label>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="e.g., kishore"
                   defaultValue="kishore@gmail.com"
                   required
                 />

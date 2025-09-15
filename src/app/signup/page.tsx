@@ -22,6 +22,7 @@ import { GraduationCap } from 'lucide-react';
 
 const formSchema = z
   .object({
+    username: z.string().min(3, "Username must be at least 3 characters."),
     email: z.string().email('Please enter a valid email address.'),
     password: z.string().min(8, 'Password must be at least 8 characters.'),
     confirmPassword: z.string(),
@@ -43,9 +44,10 @@ export default function SignupPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      username: "kishore",
       email: 'kishore@gmail.com',
-      password: 'kishore@2006',
-      confirmPassword: 'kishore@2006',
+      password: 'Kishore@2006',
+      confirmPassword: 'Kishore@2006',
     },
   });
 
@@ -83,6 +85,17 @@ export default function SignupPage() {
           </CardHeader>
           <CardContent>
             <form action={formAction} className="grid gap-4">
+               <div className="grid gap-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  name="username"
+                  type="text"
+                  placeholder="e.g., kishore"
+                  defaultValue="kishore"
+                  required
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -96,11 +109,11 @@ export default function SignupPage() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" name="password" type="password" defaultValue="kishore@2006"/>
+                <Input id="password" name="password" type="password" defaultValue="Kishore@2006"/>
               </div>
                <div className="grid gap-2">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input id="confirmPassword" name="confirmPassword" type="password" defaultValue="kishore@2006" />
+                <Input id="confirmPassword" name="confirmPassword" type="password" defaultValue="Kishore@2006" />
               </div>
               <Button type="submit" className="w-full">
                 Create an account

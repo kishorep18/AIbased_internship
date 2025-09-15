@@ -9,7 +9,7 @@ import { generateAptitudeQuiz, type GenerateAptitudeQuizInput, type GenerateApti
 import { generateRoadmap, type GenerateRoadmapInput, type GenerateRoadmapOutput } from "@/ai/flows/generate-roadmap";
 import { z } from "zod";
 import { auth } from "@/lib/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import { redirect } from "next/navigation";
 
 
@@ -135,6 +135,7 @@ export async function getRoadmap(
 }
 
 const signUpSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters."),
   email: z.string().email(),
   password: z.string().min(6),
 });
@@ -150,10 +151,11 @@ export async function signUpWithEmail(prevState: any, formData: FormData) {
     };
   }
 
-  const { email, password } = parsed.data;
+  const { email, password, username } = parsed.data;
 
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(userCredential.user, { displayName: username });
     return redirect("/");
   } catch (error: any) {
     return {
