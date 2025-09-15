@@ -7,6 +7,7 @@ import { textToSpeech, type TextToSpeechInput, type TextToSpeechOutput } from "@
 import { analyzeVideoFeedback, type AnalyzeVideoFeedbackInput, type AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedback";
 import { generateAptitudeQuiz, type GenerateAptitudeQuizInput, type GenerateAptitudeQuizOutput } from "@/ai/flows/generate-aptitude-quiz";
 import { generateRoadmap, type GenerateRoadmapInput, type GenerateRoadmapOutput } from "@/ai/flows/generate-roadmap";
+import pdf from "pdf-parse";
 
 
 export async function getInternshipRecommendations(
@@ -25,20 +26,56 @@ export async function getInternshipRecommendations(
   }
 }
 
-export async function getInterviewQuestions(
-  data: ConductInterviewInput
+export async function getInterviewQuestionsFromResume(
+  formData: FormData
 ): Promise<ConductInterviewOutput> {
+  const file = formData.get("resume") as File;
+  if (!file) {
+    throw new Error("No resume file was found in the upload.");
+  }
+
   try {
-    const questions = await conductInterview(data);
-    if (!questions?.initialQuestions?.length) {
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    let resumeText = "";
+    if (file.type === "application/pdf") {
+      // Pass the buffer directly to pdf-parse
+      const data = await pdf(buffer);
+      resumeText = data.text;
+    } else if (
+      file.type === "text/plain" ||
+      file.type === "text/markdown" ||
+      file.name.endsWith(".md")
+    ) {
+      resumeText = buffer.toString("utf8");
+    } else {
+      throw new Error(
+        `Unsupported file type: ${file.type}. Please upload a PDF, TXT, or MD file.`
+      );
+    }
+
+    if (!resumeText.trim()) {
+      throw new Error(
+        "Could not extract text from the resume. The file might be empty, corrupted, or an image-only PDF."
+      );
+    }
+
+    const result = await conductInterview({ resumeText });
+
+    if (!result?.initialQuestions?.length) {
       return { initialQuestions: [] };
     }
-    return questions;
+    return result;
   } catch (error) {
-    console.error("Error getting interview questions:", error);
-    throw new Error("Failed to get interview questions from AI service.");
+    console.error("Error processing resume:", error);
+    // Ensure a user-friendly message is thrown.
+    const errorMessage =
+      error instanceof Error ? error.message : "An unexpected error occurred while processing the resume.";
+    throw new Error(errorMessage);
   }
 }
+
 
 export async function getAudioForText(
   text: TextToSpeechInput

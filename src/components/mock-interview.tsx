@@ -4,21 +4,21 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import type { ConductInterviewOutput } from "@/ai/flows/mock-interview";
 import type { AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedback";
-import { getInterviewQuestions, getVideoFeedback } from "@/app/actions";
+import { getInterviewQuestionsFromResume, getVideoFeedback } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Loader2, Video, ArrowRight, RefreshCw, Mic, MicOff } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Loader2, Video, ArrowRight, RefreshCw, Mic, MicOff, Upload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { FeedbackCard } from "@/components/feedback-card";
-import { Textarea } from "@/components/ui/textarea";
 
 type FeedbackWithQuestion = AnalyzeVideoFeedbackOutput & { question: string };
 
 export default function MockInterview() {
-  const [resumeText, setResumeText] = useState<string>("");
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [interviewState, setInterviewState] = useState<ConductInterviewOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -102,11 +102,11 @@ export default function MockInterview() {
 
 
   const handleStartInterview = async () => {
-    if (!resumeText.trim()) {
+    if (!resumeFile) {
       toast({
         variant: "destructive",
-        title: "Resume text is empty",
-        description: "Please paste your resume content to start the interview.",
+        title: "No resume file selected",
+        description: "Please upload your resume to start the interview.",
       });
       return;
     }
@@ -118,11 +118,13 @@ export default function MockInterview() {
     setCurrentQuestionIndex(0);
     
     try {
-        const result = await getInterviewQuestions({ resumeText });
+        const formData = new FormData();
+        formData.append("resume", resumeFile);
+        const result = await getInterviewQuestionsFromResume(formData);
         if (result.initialQuestions.length === 0) {
             toast({
                 title: "Could not generate questions",
-                description: "The AI could not generate questions from your resume. Please try again with different content.",
+                description: "The AI could not generate questions from your resume. Please try again with a different file.",
             });
         }
         setInterviewState(result);
@@ -185,7 +187,7 @@ export default function MockInterview() {
 
   const resetInterview = () => {
     setInterviewState(null);
-    setResumeText("");
+    setResumeFile(null);
     setHasCameraPermission(null);
     setCurrentQuestionIndex(0);
     setFeedbackResults([]);
@@ -234,7 +236,7 @@ export default function MockInterview() {
           AI Mock Interview
         </h1>
         <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Paste your resume, and our AI will conduct a real-time video mock interview based on your skills and experience.
+          Upload your resume, and our AI will conduct a real-time video mock interview based on your skills and experience.
         </p>
       </section>
 
@@ -243,24 +245,27 @@ export default function MockInterview() {
           <Card className="shadow-lg border-2 border-primary/20">
             <CardHeader>
               <CardTitle className="text-center text-2xl font-headline">
-                Paste Your Resume
+                Upload Your Resume
               </CardTitle>
+              <CardDescription className="text-center">
+                Upload a PDF, TXT, or MD file to get started.
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid w-full gap-1.5">
-                <Label htmlFor="resume-text">Resume Content</Label>
-                <Textarea
-                  id="resume-text"
-                  placeholder="Paste your resume content here..."
-                  className="min-h-[200px]"
-                  value={resumeText}
-                  onChange={(e) => setResumeText(e.target.value)}
+                <Label htmlFor="resume-file">Resume File</Label>
+                <Input
+                  id="resume-file"
+                  type="file"
+                  accept=".pdf,.txt,.md"
+                  onChange={(e) => setResumeFile(e.target.files ? e.target.files[0] : null)}
                   disabled={isLoading}
                 />
+                 {resumeFile && <p className="text-sm text-muted-foreground mt-2">Selected: {resumeFile.name}</p>}
               </div>
               <Button
                 onClick={handleStartInterview}
-                disabled={isLoading || !resumeText.trim()}
+                disabled={isLoading || !resumeFile}
                 className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
                 size="lg"
               >
