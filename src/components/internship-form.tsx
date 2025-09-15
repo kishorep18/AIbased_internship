@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +15,7 @@ import {
   Cake,
   CalendarIcon,
 } from "lucide-react";
+import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -78,6 +80,12 @@ const sectors = [
 ];
 
 export function InternshipForm({ onSubmit, isLoading }: InternshipFormProps) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -103,6 +111,10 @@ export function InternshipForm({ onSubmit, isLoading }: InternshipFormProps) {
       sectorInterests: [values.sectorInterests],
     };
     onSubmit(processedData);
+  }
+
+  if (!isClient) {
+    return null;
   }
 
   return (

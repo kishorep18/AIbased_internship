@@ -120,7 +120,7 @@ export default function RoadmapGenerator() {
                     placeholder="e.g., Google, Microsoft"
                     {...form.register("companyName")}
                     disabled={roadmapState === "loading"}
-                  />
+                  />_
                   {form.formState.errors.companyName && (
                     <p className="text-sm text-destructive mt-1">
                       {form.formState.errors.companyName.message}
@@ -176,7 +176,7 @@ export default function RoadmapGenerator() {
                                             </CardTitle>
                                         </CardHeader>
                                         <CardContent>
-                                            <p className="text-muted-foreground text-sm line-clamp-2">{step.description}</p>
+                                            <p className="text-muted-foreground">{step.description}</p>
                                         </CardContent>
                                     </Card>
                                 </div>
