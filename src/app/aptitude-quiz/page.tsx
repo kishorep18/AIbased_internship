@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import AptitudeQuiz from '@/components/aptitude-quiz';
-import { GraduationCap, Briefcase, FileText, Route, Home as HomeIcon } from 'lucide-react';
+import { GraduationCap, Briefcase, FileText, Route, Home as HomeIcon, Bot } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -17,6 +17,7 @@ export default function AptitudeQuizPage() {
   
   const navLinks = [
     { href: '/', label: 'Home', icon: HomeIcon },
+    { href: '/internship-finder', label: 'InternMatch AI', icon: Bot },
     { href: '/mock-interview', label: 'Mock Interview', icon: Briefcase },
     { href: '/roadmap', label: 'Roadmap', icon: Route },
     { href: '/aptitude-quiz', label: 'Aptitude Quiz', icon: FileText },

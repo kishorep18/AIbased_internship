@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import RoadmapGenerator from '@/components/roadmap-generator';
+import InternshipFinder from '@/components/internship-finder';
 import { GraduationCap, Briefcase, FileText, Route, Home as HomeIcon, Bot } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -11,7 +11,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { signOutUser } from '@/app/actions';
 
-export default function RoadmapPage() {
+export default function InternshipFinderPage() {
   const pathname = usePathname();
   const { user, loading } = useAuth();
   
@@ -69,7 +69,7 @@ export default function RoadmapPage() {
         </div>
       </header>
       <main className="flex-1">
-        <RoadmapGenerator />
+        <InternshipFinder />
       </main>
       <footer className="py-6 md:px-8 md:py-0">
         <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">

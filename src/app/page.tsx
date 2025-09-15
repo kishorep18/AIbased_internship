@@ -2,7 +2,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import InternshipFinder from '@/components/internship-finder';
 import { GraduationCap, Briefcase, FileText, Route, UserPlus, Target, FileCheck, Home as HomeIcon, Bot } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -19,6 +18,7 @@ export default function Home() {
 
   const navLinks = [
     { href: '/', label: 'Home', icon: HomeIcon },
+    { href: '/internship-finder', label: 'InternMatch AI', icon: Bot },
     { href: '/mock-interview', label: 'Mock Interview', icon: Briefcase },
     { href: '/roadmap', label: 'Roadmap', icon: Route },
     { href: '/aptitude-quiz', label: 'Aptitude Quiz', icon: FileText },
@@ -47,7 +47,7 @@ export default function Home() {
       icon: <Bot className="h-10 w-10 text-primary" />,
       title: "InternMatch AI",
       description: "Our core feature. Fill out your profile and let our AI find the most relevant internships for you from hundreds of opportunities.",
-      href: "#internship-finder"
+      href: "/internship-finder"
     },
     {
       icon: <Briefcase className="h-10 w-10 text-primary" />,
@@ -115,11 +115,18 @@ export default function Home() {
         </div>
       </header>
       <main className="flex-1">
-        <section id="internship-finder">
-          <InternshipFinder />
+        <section className="py-12 md:py-20 bg-background">
+            <div className="container mx-auto px-4">
+                <div className="text-center max-w-3xl mx-auto">
+                    <h1 className="text-3xl md:text-5xl font-bold font-headline text-primary">Your All-in-One Internship Platform</h1>
+                    <p className="mt-4 text-lg md:text-xl text-muted-foreground">
+                        From finding the perfect opportunity to acing the interview, we've got you covered.
+                    </p>
+                </div>
+            </div>
         </section>
 
-        <section id="features" className="py-12 md:py-20 bg-background">
+        <section id="features" className="py-12 md:py-20 bg-muted/50">
            <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Our Features</h2>
@@ -150,7 +157,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-12 md:py-20 bg-muted/50">
+        <section className="py-12 md:py-20 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">How It Works</h2>
