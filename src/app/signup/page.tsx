@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useFormState } from 'react-dom';
+import { useActionState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -17,7 +17,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { signUpWithEmail } from '@/app/actions';
-import { useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { GraduationCap } from 'lucide-react';
 
@@ -32,8 +31,13 @@ const formSchema = z
     path: ['confirmPassword'],
   });
 
+type State = {
+  message?: string;
+  issues?: string[];
+} | null;
+
 export default function SignupPage() {
-  const [state, formAction] = useFormState(signUpWithEmail, null);
+  const [state, formAction] = useActionState<State, FormData>(signUpWithEmail, null);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
