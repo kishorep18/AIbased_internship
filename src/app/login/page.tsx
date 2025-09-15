@@ -2,6 +2,7 @@
 'use client';
 
 import { useActionState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -28,9 +29,11 @@ const formSchema = z.object({
 type State = {
   message?: string;
   issues?: string[];
+  success?: boolean;
 } | null;
 
 export default function LoginPage() {
+  const router = useRouter();
   const [state, formAction] = useActionState<State, FormData>(signInWithEmail, null);
   const { toast } = useToast();
 
@@ -43,6 +46,9 @@ export default function LoginPage() {
   });
 
   useEffect(() => {
+    if (state?.success) {
+      router.push('/');
+    }
     if (state?.issues) {
       toast({
         variant: 'destructive',
@@ -50,7 +56,7 @@ export default function LoginPage() {
         description: state.issues.join('\n'),
       });
     }
-  }, [state, toast]);
+  }, [state, toast, router]);
 
   return (
     <div className="flex flex-col min-h-dvh bg-background font-body">
@@ -91,7 +97,7 @@ export default function LoginPage() {
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" name="password" type="password" defaultValue="kishore@2006" required />
+                <Input id="password" name="password" type="password" defaultValue="Kishore@2006" required />
               </div>
               <Button type="submit" className="w-full">
                 Login

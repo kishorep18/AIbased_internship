@@ -183,7 +183,7 @@ export async function signInWithEmail(prevState: any, formData: FormData) {
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    return redirect("/");
+    return { success: true };
   } catch (error: any) {
     return {
       message: "Sign in failed",
