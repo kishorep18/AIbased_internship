@@ -14,7 +14,6 @@ import {
   User,
   Cake,
   CalendarIcon,
-  Link2,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -53,7 +52,6 @@ const formSchema = z.object({
   skills: z.string().min(3, "Please enter at least one skill."),
   sectorInterests: z.string().min(1, "Please select a sector of interest."),
   location: z.string().min(2, "Please enter your preferred location."),
-  websiteUrl: z.string().url("Please enter a valid website URL."),
 });
 
 type InternshipFormProps = {
@@ -97,7 +95,6 @@ export function InternshipForm({ onSubmit, isLoading }: InternshipFormProps) {
       skills: "",
       sectorInterests: "",
       location: "",
-      websiteUrl: "",
     },
   });
 
@@ -335,30 +332,6 @@ export function InternshipForm({ onSubmit, isLoading }: InternshipFormProps) {
                 </FormItem>
               )}
             />
-            
-            <FormField
-                control={form.control}
-                name="websiteUrl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      <Link2 className="inline-block mr-2 h-4 w-4" />
-                      Company Career Page
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="https://www.company.com/careers"
-                        disabled={isLoading}
-                        {...field}
-                      />
-                    </FormControl>
-                     <FormDescription>
-                        Enter the URL of the career page to search for internships.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
             <Button
               type="submit"
