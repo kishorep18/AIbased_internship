@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { GraduationCap, Briefcase, FileText, Route, UserPlus, Target, FileCheck, Home as HomeIcon, Bot } from 'lucide-react';
+import { GraduationCap, Briefcase, FileText, Route, UserPlus, Target, FileCheck, Home as HomeIcon, Bot, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -10,6 +10,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { signOutUser } from './actions';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
 export default function Home() {
@@ -98,9 +107,32 @@ export default function Home() {
           </nav>
           <div className="flex items-center gap-4">
            {!loading && user ? (
-              <form action={signOutUser}>
-                <Button variant="outline" type="submit">Sign Out</Button>
-              </form>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="overflow-hidden rounded-full"
+                  >
+                    <Avatar>
+                      <AvatarImage src={user.photoURL ?? ''} alt="User Avatar" />
+                      <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <form action={signOutUser}>
+                    <DropdownMenuItem asChild>
+                      <button type="submit" className="w-full text-left">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Sign Out
+                      </button>
+                    </DropdownMenuItem>
+                  </form>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : null}
           </div>
         </div>
