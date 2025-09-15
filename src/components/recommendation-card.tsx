@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Briefcase, MapPin, Route, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -99,7 +100,7 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
                 </Button>
               </DialogTrigger>
               <Button asChild size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">
-                <Link href={recommendation.applyUrl} target="_blank">
+                <Link href="https://pminternship.mca.gov.in/login/" target="_blank">
                   Apply Now
                 </Link>
               </Button>
