@@ -46,8 +46,8 @@ export default function SignupPage() {
     defaultValues: {
       username: "kishore",
       email: 'kishore@gmail.com',
-      password: 'Kishore@2006',
-      confirmPassword: 'Kishore@2006',
+      password: 'Kishore@123',
+      confirmPassword: 'Kishore@123',
     },
   });
 
@@ -109,11 +109,11 @@ export default function SignupPage() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" name="password" type="password" defaultValue="Kishore@2006"/>
+                <Input id="password" name="password" type="password" defaultValue="Kishore@123"/>
               </div>
                <div className="grid gap-2">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input id="confirmPassword" name="confirmPassword" type="password" defaultValue="Kishore@2006" />
+                <Input id="confirmPassword" name="confirmPassword" type="password" defaultValue="Kishore@123" />
               </div>
               <Button type="submit" className="w-full">
                 Create an account
