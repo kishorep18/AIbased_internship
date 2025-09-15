@@ -45,9 +45,9 @@ const prompt = ai.definePrompt({
   name: 'recommendInternshipsPrompt',
   input: {schema: RecommendInternshipsInputSchema},
   output: {schema: RecommendInternshipsOutputSchema},
-  prompt: `You are an AI career advisor that finds and recommends 3-5 internships to a candidate based on their profile, exclusively from the PM Internship Portal.
+  prompt: `You are an AI career advisor. Your ONLY task is to find and recommend 3-5 internships for a candidate based on their profile, sourced exclusively from the PM Internship Portal.
 
-  The portal is located at: https://pminternship.mca.gov.in/
+  The portal's URL is: https://pminternship.mca.gov.in/
 
   Candidate Profile:
   - Name: {{{name}}}
@@ -58,12 +58,12 @@ const prompt = ai.definePrompt({
   - Sector Interests: {{#each sectorInterests}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
   - Location: {{{location}}}
 
-  Your task is to:
+  Your instructions are:
   1. Analyze the candidate's profile.
-  2. Imagine you are searching the PM Internship Portal (https://pminternship.mca.gov.in/) for relevant internship opportunities.
+  2. Search ONLY the PM Internship Portal (https://pminternship.mca.gov.in/) for relevant internship opportunities. Do NOT use any other sources.
   3. Provide 3-5 diverse internship recommendations that are the most relevant from that specific portal.
 
-  For each recommendation, provide the title, a plausible company/ministry, a realistic description based on opportunities on the portal, the location, a relevanceScore (from 0 to 1), and a valid applyUrl. The applyUrl MUST be a plausible link to an internship listing on the pminternship.mca.gov.in domain.
+  For each recommendation, you MUST provide the title, a plausible company/ministry, a realistic description based on opportunities on the portal, the location, a relevanceScore (from 0 to 1), and a valid applyUrl. The applyUrl MUST be a plausible link to an internship listing on the pminternship.mca.gov.in domain.
   `,
 });
 
@@ -78,4 +78,5 @@ const recommendInternshipsFlow = ai.defineFlow(
     return output!;
   }
 );
+
 
