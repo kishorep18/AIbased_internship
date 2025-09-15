@@ -7,7 +7,6 @@ import { textToSpeech, type TextToSpeechInput, type TextToSpeechOutput } from "@
 import { analyzeVideoFeedback, type AnalyzeVideoFeedbackInput, type AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedback";
 import { generateAptitudeQuiz, type GenerateAptitudeQuizInput, type GenerateAptitudeQuizOutput } from "@/ai/flows/generate-aptitude-quiz";
 import { generateRoadmap, type GenerateRoadmapInput, type GenerateRoadmapOutput } from "@/ai/flows/generate-roadmap";
-import pdf from "pdf-parse";
 
 
 export async function getInternshipRecommendations(
@@ -37,10 +36,11 @@ export async function getInterviewQuestionsFromResume(
   try {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-
+    
     let resumeText = "";
     if (file.type === "application/pdf") {
-      // Pass the buffer directly to pdf-parse
+      // Dynamically import pdf-parse and use it
+      const pdf = (await import('pdf-parse/lib/pdf-parse.js')).default;
       const data = await pdf(buffer);
       resumeText = data.text;
     } else if (
