@@ -23,7 +23,7 @@ import { GraduationCap } from 'lucide-react';
 const formSchema = z
   .object({
     email: z.string().email('Please enter a valid email address.'),
-    password: z.string().min(6, 'Password must be at least 6 characters.'),
+    password: z.string().min(8, 'Password must be at least 8 characters.'),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -43,9 +43,9 @@ export default function SignupPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      password: '',
-      confirmPassword: '',
+      email: 'kishore@gmail.com',
+      password: 'kishore@2006',
+      confirmPassword: 'kishore@2006',
     },
   });
 
@@ -90,16 +90,17 @@ export default function SignupPage() {
                   name="email"
                   type="email"
                   placeholder="m@example.com"
+                  defaultValue="kishore@gmail.com"
                   required
                 />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" name="password" type="password" />
+                <Input id="password" name="password" type="password" defaultValue="kishore@2006"/>
               </div>
                <div className="grid gap-2">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
-                <Input id="confirmPassword" name="confirmPassword" type="password" />
+                <Input id="confirmPassword" name="confirmPassword" type="password" defaultValue="kishore@2006" />
               </div>
               <Button type="submit" className="w-full">
                 Create an account

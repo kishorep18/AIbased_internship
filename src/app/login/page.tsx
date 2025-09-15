@@ -37,8 +37,8 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: 'kishore@gmail.com',
+      password: 'kishore@2006',
     },
   });
 
@@ -83,6 +83,7 @@ export default function LoginPage() {
                   name="email"
                   type="email"
                   placeholder="m@example.com"
+                  defaultValue="kishore@gmail.com"
                   required
                 />
               </div>
@@ -90,7 +91,7 @@ export default function LoginPage() {
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" name="password" type="password" required />
+                <Input id="password" name="password" type="password" defaultValue="kishore@2006" required />
               </div>
               <Button type="submit" className="w-full">
                 Login
