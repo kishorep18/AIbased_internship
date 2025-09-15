@@ -16,18 +16,24 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
-import { signInWithEmail } from '@/app/actions';
+import { signUpWithEmail } from '@/app/actions';
 import { useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { GraduationCap } from 'lucide-react';
 
-const formSchema = z.object({
-  email: z.string().email('Please enter a valid email address.'),
-  password: z.string().min(1, 'Password is required.'),
-});
+const formSchema = z
+  .object({
+    email: z.string().email('Please enter a valid email address.'),
+    password: z.string().min(6, 'Password must be at least 6 characters.'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
-export default function LoginPage() {
-  const [state, formAction] = useFormState(signInWithEmail, null);
+export default function SignupPage() {
+  const [state, formAction] = useFormState(signUpWithEmail, null);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -35,6 +41,7 @@ export default function LoginPage() {
     defaultValues: {
       email: '',
       password: '',
+      confirmPassword: '',
     },
   });
 
@@ -42,7 +49,7 @@ export default function LoginPage() {
     if (state?.issues) {
       toast({
         variant: 'destructive',
-        title: 'Login Failed',
+        title: 'Sign Up Failed',
         description: state.issues.join('\n'),
       });
     }
@@ -65,9 +72,9 @@ export default function LoginPage() {
       <main className="flex-1 flex items-center justify-center">
         <Card className="mx-auto max-w-sm">
           <CardHeader>
-            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardTitle className="text-xl">Sign Up</CardTitle>
             <CardDescription>
-              Enter your email below to login to your account
+              Enter your information to create an account
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -83,19 +90,21 @@ export default function LoginPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
-                <Input id="password" name="password" type="password" required />
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" name="password" type="password" />
+              </div>
+               <div className="grid gap-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Input id="confirmPassword" name="confirmPassword" type="password" />
               </div>
               <Button type="submit" className="w-full">
-                Login
+                Create an account
               </Button>
             </form>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="underline">
-                Sign up
+              Already have an account?{' '}
+              <Link href="/login" className="underline">
+                Sign in
               </Link>
             </div>
           </CardContent>

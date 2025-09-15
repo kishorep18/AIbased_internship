@@ -7,9 +7,13 @@ import { GraduationCap, Briefcase, FileText, Route } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/use-auth';
+import { Button } from '@/components/ui/button';
+import { signOutUser } from '@/app/actions';
 
 export default function RoadmapPage() {
   const pathname = usePathname();
+  const { user, loading } = useAuth();
   
   const navLinks = [
     { href: '/mock-interview', label: 'Mock Interview', icon: Briefcase },
@@ -45,7 +49,20 @@ export default function RoadmapPage() {
             ))}
           </nav>
           <div className="flex items-center gap-4">
-            
+          {!loading && user ? (
+              <form action={signOutUser}>
+                <Button variant="outline" type="submit">Sign Out</Button>
+              </form>
+            ) : !loading ? (
+              <>
+                <Button asChild variant="outline">
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
+              </>
+            ) : null}
           </div>
         </div>
       </header>

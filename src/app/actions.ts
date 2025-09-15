@@ -7,6 +7,10 @@ import { textToSpeech, type TextToSpeechInput, type TextToSpeechOutput } from "@
 import { analyzeVideoFeedback, type AnalyzeVideoFeedbackInput, type AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedback";
 import { generateAptitudeQuiz, type GenerateAptitudeQuizInput, type GenerateAptitudeQuizOutput } from "@/ai/flows/generate-aptitude-quiz";
 import { generateRoadmap, type GenerateRoadmapInput, type GenerateRoadmapOutput } from "@/ai/flows/generate-roadmap";
+import { z } from "zod";
+import { auth } from "@/lib/firebase";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { redirect } from "next/navigation";
 
 
 export async function getInternshipRecommendations(
@@ -128,4 +132,67 @@ export async function getRoadmap(
         console.error("Error getting roadmap:", error);
         throw new Error("Failed to get roadmap from AI service.");
     }
+}
+
+const signUpSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+export async function signUpWithEmail(prevState: any, formData: FormData) {
+  const data = Object.fromEntries(formData);
+  const parsed = signUpSchema.safeParse(data);
+
+  if (!parsed.success) {
+    return {
+      message: "Invalid form data",
+      issues: parsed.error.issues.map((issue) => issue.message),
+    };
+  }
+
+  const { email, password } = parsed.data;
+
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    return redirect("/");
+  } catch (error: any) {
+    return {
+      message: "Sign up failed",
+      issues: [error.message || "An unexpected error occurred."],
+    };
+  }
+}
+
+const signInSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+
+export async function signInWithEmail(prevState: any, formData: FormData) {
+  const data = Object.fromEntries(formData);
+  const parsed = signInSchema.safeParse(data);
+
+  if (!parsed.success) {
+    return {
+      message: "Invalid form data",
+      issues: parsed.error.issues.map((issue) => issue.message),
+    };
+  }
+
+  const { email, password } = parsed.data;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    return redirect("/");
+  } catch (error: any) {
+    return {
+      message: "Sign in failed",
+      issues: [error.message || "An unexpected error occurred."],
+    };
+  }
+}
+
+export async function signOutUser() {
+  await signOut(auth);
+  return redirect("/");
 }
