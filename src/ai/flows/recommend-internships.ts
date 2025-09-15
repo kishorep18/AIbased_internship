@@ -1,9 +1,9 @@
 'use server';
 
 /**
- * @fileOverview Recommends internships based on user profile information.
+ * @fileOverview Recommends internships based on user profile information and a specific website.
  *
- * - recommendInternships - A function that takes user profile information and returns a list of recommended internships.
+ * - recommendInternships - A function that takes user profile information and a website URL, and returns a list of recommended internships.
  * - RecommendInternshipsInput - The input type for the recommendInternships function.
  * - RecommendInternshipsOutput - The return type for the recommendInternships function.
  */
@@ -19,6 +19,7 @@ const RecommendInternshipsInputSchema = z.object({
   skills: z.array(z.string()).describe("A list of the candidate's skills."),
   sectorInterests: z.array(z.string()).describe("A list of the candidate's sector interests."),
   location: z.string().describe("The candidate's preferred location."),
+  websiteUrl: z.string().url().describe("The URL of the company's career page to search for internships."),
 });
 export type RecommendInternshipsInput = z.infer<typeof RecommendInternshipsInputSchema>;
 
@@ -30,7 +31,7 @@ const RecommendInternshipsOutputSchema = z.object({
       description: z.string().describe('A brief description of the internship.'),
       location: z.string().describe('The location of the internship.'),
       relevanceScore: z.number().describe('A score indicating the relevance of the internship to the candidate.'),
-      applyUrl: z.string().url().describe('A URL to apply for the internship. This should be a placeholder link to a job board or company website.'),
+      applyUrl: z.string().url().describe('A URL to apply for the internship. This should be a direct link to the job posting if available.'),
     })
   ).describe('A list of recommended internships.'),
 });
@@ -44,7 +45,7 @@ const prompt = ai.definePrompt({
   name: 'recommendInternshipsPrompt',
   input: {schema: RecommendInternshipsInputSchema},
   output: {schema: RecommendInternshipsOutputSchema},
-  prompt: `You are an AI assistant that recommends 3-5 internships to candidates based on their profile information. All internship recommendations must be from the "PM Internship Scheme".
+  prompt: `You are an AI assistant that finds and recommends 3-5 internships to a candidate based on their profile and a specific company website.
 
   Candidate Profile:
   - Name: {{{name}}}
@@ -55,8 +56,15 @@ const prompt = ai.definePrompt({
   - Sector Interests: {{#each sectorInterests}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
   - Location: {{{location}}}
 
-  Please provide 3-5 internship recommendations that are most relevant to the candidate's profile from the "PM Internship Scheme".
-  Format the output as a JSON object with an array of internship recommendations, each including the title, company, description, location, relevanceScore, and applyUrl. The relevanceScore should be from 0 to 1. The applyUrl should be a placeholder link to a relevant job board, like LinkedIn, Indeed, or a company's career page. For example, for a "Software Engineer Intern" at "Google", a good link would be "https://www.linkedin.com/jobs/search/?keywords=Software%20Engineer%20Intern%20Google".
+  Website to search for internships: {{{websiteUrl}}}
+
+  Your task is to:
+  1. Act as a career advisor and browse the provided website URL.
+  2. Find relevant internship opportunities listed on that site.
+  3. Analyze the candidate's profile and compare it with the internships you found.
+  4. Provide 3-5 internship recommendations that are the most relevant.
+
+  For each recommendation, provide the title, company, description, location, a relevanceScore (from 0 to 1), and a direct applyUrl to the internship listing on the provided website. If the company name is not obvious from the website, infer it from the URL.
   `,
 });
 
