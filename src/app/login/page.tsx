@@ -99,12 +99,6 @@ export default function LoginPage() {
                 Login
               </Button>
             </form>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="underline">
-                Register here
-              </Link>
-            </div>
           </CardContent>
         </Card>
       </main>

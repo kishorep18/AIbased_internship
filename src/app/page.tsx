@@ -106,9 +106,6 @@ export default function Home() {
                 <Button asChild variant="outline">
                   <Link href="/login">Login</Link>
                 </Button>
-                <Button asChild>
-                  <Link href="/signup">Sign Up</Link>
-                </Button>
               </>
             ) : null}
           </div>
