@@ -10,7 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { signOutUser } from './actions';
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { AnimatedElement } from '@/components/animated-element';
 
 
 export default function Home() {
@@ -124,40 +125,42 @@ export default function Home() {
         <section className="py-12 md:py-20 bg-background">
             <div className="container mx-auto px-4">
                 <div className="text-center max-w-3xl mx-auto">
-                    <h1 className="text-3xl md:text-5xl font-bold font-headline text-primary">Your All-in-One Internship Platform</h1>
-                    <p className="mt-4 text-lg md:text-xl text-muted-foreground">
+                    <AnimatedElement as="h1" className="text-3xl md:text-5xl font-bold font-headline text-primary">Your All-in-One Internship Platform</AnimatedElement>
+                    <AnimatedElement as="p" className="mt-4 text-lg md:text-xl text-muted-foreground" delay={0.1}>
                         From finding the perfect opportunity to acing the interview, we've got you covered.
-                    </p>
+                    </AnimatedElement>
                 </div>
             </div>
         </section>
 
         <section id="features" className="py-12 md:py-20 bg-muted/50">
            <div className="container mx-auto px-4">
-            <div className="text-center max-w-3xl mx-auto">
+            <AnimatedElement className="text-center max-w-3xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Our Features</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 All the tools you need to find and land your dream internship.
               </p>
-            </div>
+            </AnimatedElement>
             <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-2">
               {features.map((feature, index) => (
-                <Card key={index} className="text-center shadow-lg border-2 border-primary/10 transform hover:-translate-y-2 transition-transform duration-300">
-                  <CardHeader>
-                    <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit">
-                      {feature.icon}
+                <AnimatedElement key={index} delay={0.2 + index * 0.1}>
+                    <Card className="text-center shadow-lg border-2 border-primary/10 transform hover:-translate-y-2 transition-transform duration-300 h-full flex flex-col">
+                    <CardHeader>
+                        <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit">
+                        {feature.icon}
+                        </div>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                        <CardTitle className="text-xl font-bold font-headline">{feature.title}</CardTitle>
+                        <CardDescription className="mt-2 text-muted-foreground">{feature.description}</CardDescription>
+                    </CardContent>
+                    <div className="p-6 pt-0">
+                        <Button asChild>
+                            <Link href={feature.href}>{feature.title === 'InternMatch AI' ? 'Find Internships' : `Go to ${feature.title}`}</Link>
+                        </Button>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <CardTitle className="text-xl font-bold font-headline">{feature.title}</CardTitle>
-                    <CardDescription className="mt-2 text-muted-foreground">{feature.description}</CardDescription>
-                  </CardContent>
-                  <div className="p-6 pt-0">
-                    <Button asChild>
-                        <Link href={feature.href}>{feature.title === 'InternMatch AI' ? 'Find Internships' : `Go to ${feature.title}`}</Link>
-                    </Button>
-                  </div>
-                </Card>
+                    </Card>
+                </AnimatedElement>
               ))}
             </div>
           </div>
@@ -165,25 +168,27 @@ export default function Home() {
 
         <section className="py-12 md:py-20 bg-background">
           <div className="container mx-auto px-4">
-            <div className="text-center max-w-3xl mx-auto">
+            <AnimatedElement className="text-center max-w-3xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">How It Works</h2>
               <p className="mt-4 text-lg text-muted-foreground">
                 A simple, streamlined process to connect you with your future.
               </p>
-            </div>
+            </AnimatedElement>
             <div className="mt-12 grid gap-8 md:grid-cols-3">
               {workingSteps.map((step, index) => (
-                <Card key={index} className="text-center shadow-lg border-2 border-primary/10">
-                  <CardHeader>
-                    <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit">
-                      {step.icon}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <h3 className="text-xl font-bold font-headline">{step.title}</h3>
-                    <p className="mt-2 text-muted-foreground">{step.description}</p>
-                  </CardContent>
-                </Card>
+                <AnimatedElement key={index} delay={0.2 + index * 0.1}>
+                    <Card className="text-center shadow-lg border-2 border-primary/10 h-full">
+                    <CardHeader>
+                        <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit">
+                        {step.icon}
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <h3 className="text-xl font-bold font-headline">{step.title}</h3>
+                        <p className="mt-2 text-muted-foreground">{step.description}</p>
+                    </CardContent>
+                    </Card>
+                </AnimatedElement>
               ))}
             </div>
           </div>
