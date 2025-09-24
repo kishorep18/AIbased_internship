@@ -61,7 +61,7 @@ export default function CareerNavigator() {
     setPathwayData(null);
     try {
       const skillsArray = values.currentSkills
-        .split(/[,n]+/)
+        .split(/[,\\n]+/)
         .map((skill) => skill.trim())
         .filter(Boolean);
 
