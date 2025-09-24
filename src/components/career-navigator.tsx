@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Compass, Sparkles, Zap, Gem, Gauge, Clock, StepForward, Award, Briefcase, Building, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getCareerPathway } from "@/app/actions";
@@ -21,11 +21,17 @@ const formSchema = z.object({
   name: z.string().min(2, "Please enter your name."),
   age: z.string().min(1, "Please enter your age."),
   location: z.string().min(2, "Please enter your location."),
-  highestQualification: z.string().min(3, "Please enter your highest qualification."),
-  currentSkills: z.string().min(3, "Please list at least one skill."),
-  desiredRole: z.string().min(3, "Please enter your desired job role."),
-  industry: z.string().min(2, "Please enter your target industry."),
+  highestQualification: z.string().min(1, "Please select a qualification."),
+  currentSkills: z.string().min(1, "Please select a skill."),
+  desiredRole: z.string().min(1, "Please select a desired role."),
+  industry: z.string().min(1, "Please select a target industry."),
 });
+
+const qualifications = ["10th Pass", "12th Pass", "Diploma", "Graduate", "Post Graduate"];
+const skills = ["Web Development", "Data Science", "Marketing", "Sales", "Design", "Writing", "Customer Service"];
+const roles = ["Software Developer", "Data Analyst", "Digital Marketer", "Sales Executive", "UI/UX Designer", "Content Writer", "Project Manager"];
+const industries = ["Information Technology", "Healthcare", "Finance", "Education", "E-commerce", "Manufacturing", "Automotive"];
+
 
 const pathwayIcons = {
   "Fast-Track": Zap,
@@ -62,11 +68,6 @@ export default function CareerNavigator() {
     setIsLoading(true);
     setPathwayData(null);
     try {
-      const skillsArray = values.currentSkills
-        .split(/[,\\n]+/)
-        .map((skill) => skill.trim())
-        .filter(Boolean);
-
       const input: GenerateCareerPathwayInput = {
         personalProfile: {
           name: values.name,
@@ -75,7 +76,7 @@ export default function CareerNavigator() {
         },
         educationAndSkills: {
           highestQualification: values.highestQualification,
-          currentSkills: skillsArray,
+          currentSkills: [values.currentSkills],
         },
         careerAspirations: {
           desiredRole: values.desiredRole,
@@ -160,37 +161,64 @@ export default function CareerNavigator() {
                    <FormField control={form.control} name="highestQualification" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Highest Qualification</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., B.Tech in IT" disabled={isLoading} {...field} />
-                      </FormControl>
+                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a qualification" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                {qualifications.map(q => <SelectItem key={q} value={q}>{q}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
                       <FormMessage />
                     </FormItem>
                   )} />
                    <FormField control={form.control} name="currentSkills" render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Current Skills</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="e.g., Java, Python, Communication" disabled={isLoading} {...field} />
-                      </FormControl>
-                      <FormDescription>Enter skills separated by commas.</FormDescription>
+                      <FormLabel>Primary Skill</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select your primary skill" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                {skills.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
                       <FormMessage />
                     </FormItem>
                   )} />
                   <FormField control={form.control} name="desiredRole" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Desired Job Role</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., Full Stack Developer" disabled={isLoading} {...field} />
-                      </FormControl>
+                       <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a desired role" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                {roles.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
                       <FormMessage />
                     </FormItem>
                   )} />
                    <FormField control={form.control} name="industry" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Target Industry</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., Information Technology" disabled={isLoading} {...field} />
-                      </FormControl>
+                       <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                            <FormControl>
+                                <SelectTrigger>
+                                <SelectValue placeholder="Select a target industry" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                {industries.map(i => <SelectItem key={i} value={i}>{i}</SelectItem>)}
+                            </SelectContent>
+                        </Select>
                       <FormMessage />
                     </FormItem>
                   )} />
@@ -287,3 +315,5 @@ export default function CareerNavigator() {
     </div>
   );
 }
+
+    
