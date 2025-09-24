@@ -20,7 +20,6 @@ export default function Home() {
 
   const navLinks = [
     { href: '/', label: 'Home', icon: HomeIcon },
-    { href: '/internship-finder', label: 'InternMatch AI', icon: Bot },
     { href: '/mock-interview', label: 'Mock Interview', icon: Briefcase },
     { href: '/roadmap', label: 'Roadmap', icon: Route },
     { href: '/aptitude-quiz', label: 'Aptitude Quiz', icon: FileText },
@@ -45,12 +44,6 @@ export default function Home() {
   ];
 
   const features = [
-    {
-      icon: <Bot className="h-10 w-10 text-primary" />,
-      title: "InternMatch AI",
-      description: "Our core feature. Fill out your profile and let our AI find the most relevant internships for you from hundreds of opportunities.",
-      href: "/internship-finder"
-    },
     {
       icon: <Briefcase className="h-10 w-10 text-primary" />,
       title: "Mock Interview",
@@ -141,7 +134,7 @@ export default function Home() {
                 All the tools you need to find and land your dream internship.
               </p>
             </AnimatedElement>
-            <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+            <div className="mt-12 grid gap-8 md:grid-cols-1 lg:grid-cols-3">
               {features.map((feature, index) => (
                 <AnimatedElement key={index} delay={0.2 + index * 0.1}>
                     <Card className="text-center shadow-lg border-2 border-primary/10 transform hover:-translate-y-2 transition-transform duration-300 h-full flex flex-col">
@@ -156,7 +149,7 @@ export default function Home() {
                     </CardContent>
                     <div className="p-6 pt-0">
                         <Button asChild>
-                            <Link href={feature.href}>{feature.title === 'InternMatch AI' ? 'Find Internships' : `Go to ${feature.title}`}</Link>
+                            <Link href={feature.href}>{`Go to ${feature.title}`}</Link>
                         </Button>
                     </div>
                     </Card>

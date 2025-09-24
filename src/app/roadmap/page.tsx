@@ -18,7 +18,6 @@ export default function RoadmapPage() {
   
   const navLinks = [
     { href: '/', label: 'Home', icon: HomeIcon },
-    { href: '/internship-finder', label: 'InternMatch AI', icon: Bot },
     { href: '/mock-interview', label: 'Mock Interview', icon: Briefcase },
     { href: '/roadmap', label: 'Roadmap', icon: Route },
     { href: '/aptitude-quiz', label: 'Aptitude Quiz', icon: FileText },
