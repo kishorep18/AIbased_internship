@@ -21,7 +21,7 @@ import type { GenerateRoadmapOutput } from "@/ai/flows/generate-roadmap";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  internshipTitle: z.string().min(2, "Please enter an internship title."),
+  skillTitle: z.string().min(2, "Please enter a skill title."),
   companyName: z.string().min(2, "Please enter a company name."),
 });
 
@@ -46,7 +46,7 @@ export default function RoadmapGenerator() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      internshipTitle: "",
+      skillTitle: "",
       companyName: "",
     },
   });
@@ -94,22 +94,22 @@ export default function RoadmapGenerator() {
                 Generate a Career Roadmap
               </CardTitle>
               <CardDescription className="text-center">
-                Enter an internship and company to get your personalized roadmap.
+                Enter a skill and company to get your personalized roadmap.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={form.handleSubmit(handleGenerateRoadmap)} className="space-y-6">
                 <div className="grid w-full items-center gap-1.5">
-                  <Label htmlFor="internshipTitle">Internship Title</Label>
+                  <Label htmlFor="skillTitle">Skill Title</Label>
                   <Input
-                    id="internshipTitle"
-                    placeholder="e.g., Software Engineering Intern"
-                    {...form.register("internshipTitle")}
+                    id="skillTitle"
+                    placeholder="e.g., Full Stack Development"
+                    {...form.register("skillTitle")}
                     disabled={roadmapState === "loading"}
                   />
-                  {form.formState.errors.internshipTitle && (
+                  {form.formState.errors.skillTitle && (
                     <p className="text-sm text-destructive mt-1">
-                      {form.formState.errors.internshipTitle.message}
+                      {form.formState.errors.skillTitle.message}
                     </p>
                   )}
                 </div>
@@ -120,7 +120,7 @@ export default function RoadmapGenerator() {
                     placeholder="e.g., Google, Microsoft"
                     {...form.register("companyName")}
                     disabled={roadmapState === "loading"}
-                  />_
+                  />
                   {form.formState.errors.companyName && (
                     <p className="text-sm text-destructive mt-1">
                       {form.formState.errors.companyName.message}
@@ -151,7 +151,7 @@ export default function RoadmapGenerator() {
                     <CardHeader className="text-center">
                         <CardTitle className="text-3xl font-headline">Your Roadmap to Success</CardTitle>
                         <CardDescription>
-                            For {form.getValues("internshipTitle")} at {form.getValues("companyName")}
+                            For {form.getValues("skillTitle")} at {form.getValues("companyName")}
                         </CardDescription>
                     </CardHeader>
                 </Card>

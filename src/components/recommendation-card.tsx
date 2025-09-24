@@ -49,7 +49,7 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
     setRoadmap(null);
     try {
       const result = await getRoadmap({
-        internshipTitle: recommendation.title,
+        skillTitle: recommendation.title,
         companyName: recommendation.company,
       });
       setRoadmap(result);

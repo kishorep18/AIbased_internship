@@ -12,7 +12,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
 const GenerateRoadmapInputSchema = z.object({
-  internshipTitle: z.string().describe('The title of the internship.'),
+  skillTitle: z.string().describe('The title of the skill.'),
   companyName: z.string().describe('The name of the company.'),
 });
 export type GenerateRoadmapInput = z.infer<typeof GenerateRoadmapInputSchema>;
@@ -36,10 +36,10 @@ const prompt = ai.definePrompt({
   name: 'generateRoadmapPrompt',
   input: { schema: GenerateRoadmapInputSchema },
   output: { schema: GenerateRoadmapOutputSchema },
-  prompt: `You are an expert career coach. Your task is to generate a step-by-step roadmap for a student trying to get an internship.
+  prompt: `You are an expert career coach. Your task is to generate a step-by-step roadmap for a student trying to get an internship for a specific skill.
 
-  Internship Target:
-  - Title: {{{internshipTitle}}}
+  Skill Target:
+  - Title: {{{skillTitle}}}
   - Company: {{{companyName}}}
 
   Generate a 5-7 step roadmap that is actionable and easy to follow. Each step should have a clear title and a detailed description.
