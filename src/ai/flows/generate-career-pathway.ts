@@ -18,8 +18,9 @@ import { z } from 'genkit';
 // 1. Inputs to the Engine
 const GenerateCareerPathwayInputSchema = z.object({
   personalProfile: z.object({
-    age: z.string().describe('Learner\'s age.'),
-    location: z.string().describe('Learner\'s current location (city/state).'),
+    name: z.string().describe("Learner's full name."),
+    age: z.string().describe("Learner's age."),
+    location: z.string().describe("Learner's current location (city/state)."),
   }),
   educationAndSkills: z.object({
     highestQualification: z.string().describe('Learner\'s highest academic qualification (e.g., "12th Pass", "B.Tech in Computer Science").'),
@@ -69,7 +70,7 @@ const prompt = ai.definePrompt({
   Your task is to create a personalized career recommendation engine. Analyze the learner's profile and generate three distinct, actionable pathways for them: a "Fast-Track" option, a "Budget-Friendly" option, and a "Step-by-Step" (balanced) option.
 
   **Learner Profile:**
-  - **Personal:** Age {{{personalProfile.age}}}, Location: {{{personalProfile.location}}}
+  - **Personal:** Name: {{{personalProfile.name}}}, Age {{{personalProfile.age}}}, Location: {{{personalProfile.location}}}
   - **Education & Skills:**
     - Highest Qualification: {{{educationAndSkills.highestQualification}}}
     - Current Skills: {{#each educationAndSkills.currentSkills}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
@@ -86,7 +87,7 @@ const prompt = ai.definePrompt({
   5.  **Define a Step-by-Step Dashboard:** For each pathway, create a clear, sequential career dashboard. Each step should include a title, description, the type of action (Course, Certification, Apprenticeship, Job), and where applicable, the NSQF level.
   6.  **Estimate Timelines:** Provide a realistic estimated time to complete each pathway.
 
-  Your final output must be structured as a comprehensive plan that guides the learner from their current state to their desired job role.
+  Your final output must be a comprehensive plan that guides the learner from their current state to their desired job role.
   `,
 });
 

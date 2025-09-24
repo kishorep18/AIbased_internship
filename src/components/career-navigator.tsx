@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Compass, Sparkles, Zap, Gem, Gauge, Clock, StepForward, Award, Briefcase, Building } from "lucide-react";
+import { Loader2, Compass, Sparkles, Zap, Gem, Gauge, Clock, StepForward, Award, Briefcase, Building, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getCareerPathway } from "@/app/actions";
 import type { GenerateCareerPathwayInput, GenerateCareerPathwayOutput } from "@/ai/flows/generate-career-pathway";
@@ -18,6 +18,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 
 const formSchema = z.object({
+  name: z.string().min(2, "Please enter your name."),
   age: z.string().min(1, "Please enter your age."),
   location: z.string().min(2, "Please enter your location."),
   highestQualification: z.string().min(3, "Please enter your highest qualification."),
@@ -47,6 +48,7 @@ export default function CareerNavigator() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       age: "",
       location: "",
       highestQualification: "",
@@ -67,6 +69,7 @@ export default function CareerNavigator() {
 
       const input: GenerateCareerPathwayInput = {
         personalProfile: {
+          name: values.name,
           age: values.age,
           location: values.location,
         },
@@ -127,6 +130,15 @@ export default function CareerNavigator() {
             <CardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(handleGetPathway)} className="space-y-6">
+                  <FormField control={form.control} name="name" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Anjali Sharma" disabled={isLoading} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
                   <FormField control={form.control} name="age" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Age</FormLabel>
@@ -206,7 +218,7 @@ export default function CareerNavigator() {
                 <CardHeader>
                     <CardTitle className="text-3xl font-headline">Your Personalized Career Pathways</CardTitle>
                     <CardDescription>
-                        For the role of {form.getValues("desiredRole")} in the {form.getValues("industry")} industry.
+                        For {form.getValues("desiredRole")} in the {form.getValues("industry")} industry.
                     </CardDescription>
                 </CardHeader>
             </Card>
