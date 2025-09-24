@@ -35,11 +35,11 @@ export default function Home() {
     {
       icon: <Target className="h-10 w-10 text-primary" />,
       title: "Get AI Recommendations",
-      description: "Our AI analyzes your profile to find the best internship matches.",
+      description: "Our AI analyzes your profile to find the best career paths and job matches.",
     },
     {
       icon: <FileCheck className="h-10 w-10 text-primary" />,
-      title: "Land Your Internship",
+      title: "Land Your Dream Job",
       description: "Use our tools like the Roadmap Generator and Mock Interview to prepare and succeed.",
     },
   ];
@@ -125,9 +125,9 @@ export default function Home() {
         <section className="py-12 md:py-20 bg-background">
             <div className="container mx-auto px-4">
                 <div className="text-center max-w-3xl mx-auto">
-                    <AnimatedElement as="h1" className="text-3xl md:text-5xl font-bold font-headline text-primary">Your All-in-One Internship Platform</AnimatedElement>
+                    <AnimatedElement as="h1" className="text-3xl md:text-5xl font-bold font-headline text-primary">Your All-in-One Career Guidance Platform</AnimatedElement>
                     <AnimatedElement as="p" className="mt-4 text-lg md:text-xl text-muted-foreground" delay={0.1}>
-                        From finding the perfect opportunity to acing the interview, we've got you covered.
+                        From finding the perfect career path to acing the interview, we've got you covered.
                     </AnimatedElement>
                 </div>
             </div>
@@ -138,7 +138,7 @@ export default function Home() {
             <AnimatedElement className="text-center max-w-3xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold font-headline">Our Features</h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                All the tools you need to find and land your dream internship.
+                All the tools you need to find and land your dream job.
               </p>
             </AnimatedElement>
             <div className="mt-12 grid gap-8 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4">
