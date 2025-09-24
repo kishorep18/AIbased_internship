@@ -1,9 +1,9 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
-import InternshipFinder from '@/components/internship-finder';
-import { GraduationCap, Briefcase, FileText, Route, Home as HomeIcon, Bot, LogOut, User } from 'lucide-react';
+import { useState } from 'react';
+import CareerNavigator from '@/components/career-navigator';
+import { GraduationCap, Briefcase, FileText, Route, Home as HomeIcon, Bot, LogOut, User, Compass } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -12,13 +12,13 @@ import { Button } from '@/components/ui/button';
 import { signOutUser } from '@/app/actions';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export default function InternshipFinderPage() {
+export default function CareerNavigatorPage() {
   const pathname = usePathname();
   const { user, loading } = useAuth();
   
   const navLinks = [
     { href: '/', label: 'Home', icon: HomeIcon },
-    { href: '/internship-finder', label: 'InternMatch AI', icon: Bot },
+    { href: '/career-navigator', label: 'Career Navigator', icon: Compass },
     { href: '/mock-interview', label: 'Mock Interview', icon: Briefcase },
     { href: '/roadmap', label: 'Roadmap', icon: Route },
     { href: '/aptitude-quiz', label: 'Aptitude Quiz', icon: FileText },
@@ -75,7 +75,7 @@ export default function InternshipFinderPage() {
         </div>
       </header>
       <main className="flex-1">
-        <InternshipFinder />
+        <CareerNavigator />
       </main>
       <footer className="py-6 md:px-8 md:py-0">
         <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">

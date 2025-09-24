@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { GraduationCap, Briefcase, FileText, Route, UserPlus, Target, FileCheck, Home as HomeIcon, Bot, LogOut, User } from 'lucide-react';
+import { GraduationCap, Briefcase, FileText, Route, UserPlus, Target, FileCheck, Home as HomeIcon, Bot, LogOut, User, Compass } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -20,6 +20,7 @@ export default function Home() {
 
   const navLinks = [
     { href: '/', label: 'Home', icon: HomeIcon },
+    { href: '/career-navigator', label: 'Career Navigator', icon: Compass },
     { href: '/mock-interview', label: 'Mock Interview', icon: Briefcase },
     { href: '/roadmap', label: 'Roadmap', icon: Route },
     { href: '/aptitude-quiz', label: 'Aptitude Quiz', icon: FileText },
@@ -44,6 +45,12 @@ export default function Home() {
   ];
 
   const features = [
+     {
+      icon: <Compass className="h-10 w-10 text-primary" />,
+      title: "AI Career Navigator",
+      description: "Get a personalized career pathway with NSQF mapping and labor market insights.",
+      href: "/career-navigator"
+    },
     {
       icon: <Briefcase className="h-10 w-10 text-primary" />,
       title: "Mock Interview",
@@ -134,7 +141,7 @@ export default function Home() {
                 All the tools you need to find and land your dream internship.
               </p>
             </AnimatedElement>
-            <div className="mt-12 grid gap-8 md:grid-cols-1 lg:grid-cols-3">
+            <div className="mt-12 grid gap-8 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4">
               {features.map((feature, index) => (
                 <AnimatedElement key={index} delay={0.2 + index * 0.1}>
                     <Card className="text-center shadow-lg border-2 border-primary/10 transform hover:-translate-y-2 transition-transform duration-300 h-full flex flex-col">

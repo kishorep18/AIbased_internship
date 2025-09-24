@@ -7,6 +7,7 @@ import { analyzeVideoFeedback, type AnalyzeVideoFeedbackInput, type AnalyzeVideo
 import { generateAptitudeQuiz, type GenerateAptitudeQuizInput, type GenerateAptitudeQuizOutput } from "@/ai/flows/generate-aptitude-quiz";
 import { generateRoadmap, type GenerateRoadmapInput, type GenerateRoadmapOutput } from "@/ai/flows/generate-roadmap";
 import { recommendInternships, type RecommendInternshipsInput, type RecommendInternshipsOutput } from "@/ai/flows/recommend-internships";
+import { generateCareerPathway, type GenerateCareerPathwayInput, type GenerateCareerPathwayOutput } from "@/ai/flows/generate-career-pathway";
 import { z } from "zod";
 import { auth } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
@@ -130,6 +131,21 @@ export async function getInternshipRecommendations(
     } catch (error) {
         console.error("Error getting internship recommendations:", error);
         throw new Error("Failed to get internship recommendations from AI service.");
+    }
+}
+
+export async function getCareerPathway(
+    data: GenerateCareerPathwayInput
+): Promise<GenerateCareerPathwayOutput> {
+    try {
+        const pathway = await generateCareerPathway(data);
+        if (!pathway?.pathways?.length) {
+            return { pathways: [] };
+        }
+        return pathway;
+    } catch (error) {
+        console.error("Error getting career pathway:", error);
+        throw new Error("Failed to get career pathway from AI service.");
     }
 }
 

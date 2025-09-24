@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import RoadmapGenerator from '@/components/roadmap-generator';
-import { GraduationCap, Briefcase, FileText, Route, Home as HomeIcon, Bot, LogOut, User } from 'lucide-react';
+import { GraduationCap, Briefcase, FileText, Route, Home as HomeIcon, Bot, LogOut, User, Compass } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -18,6 +18,7 @@ export default function RoadmapPage() {
   
   const navLinks = [
     { href: '/', label: 'Home', icon: HomeIcon },
+    { href: '/career-navigator', label: 'Career Navigator', icon: Compass },
     { href: '/mock-interview', label: 'Mock Interview', icon: Briefcase },
     { href: '/roadmap', label: 'Roadmap', icon: Route },
     { href: '/aptitude-quiz', label: 'Aptitude Quiz', icon: FileText },
