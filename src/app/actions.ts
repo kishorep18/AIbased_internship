@@ -6,6 +6,7 @@ import { textToSpeech, type TextToSpeechInput, type TextToSpeechOutput } from "@
 import { analyzeVideoFeedback, type AnalyzeVideoFeedbackInput, type AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedback";
 import { generateAptitudeQuiz, type GenerateAptitudeQuizInput, type GenerateAptitudeQuizOutput } from "@/ai/flows/generate-aptitude-quiz";
 import { generateRoadmap, type GenerateRoadmapInput, type GenerateRoadmapOutput } from "@/ai/flows/generate-roadmap";
+import { recommendInternships, type RecommendInternshipsInput, type RecommendInternshipsOutput } from "@/ai/flows/recommend-internships";
 import { z } from "zod";
 import { auth } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
@@ -114,6 +115,21 @@ export async function getRoadmap(
     } catch (error) {
         console.error("Error getting roadmap:", error);
         throw new Error("Failed to get roadmap from AI service.");
+    }
+}
+
+export async function getInternshipRecommendations(
+    data: RecommendInternshipsInput
+): Promise<RecommendInternshipsOutput> {
+    try {
+        const recommendations = await recommendInternships(data);
+        if (!recommendations?.internshipRecommendations?.length) {
+            return { internshipRecommendations: [] };
+        }
+        return recommendations;
+    } catch (error) {
+        console.error("Error getting internship recommendations:", error);
+        throw new Error("Failed to get internship recommendations from AI service.");
     }
 }
 
