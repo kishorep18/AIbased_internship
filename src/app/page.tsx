@@ -79,7 +79,7 @@ export default function Home() {
             <Link className="mr-6 flex items-center space-x-2" href="/">
               <GraduationCap className="h-6 w-6 text-primary" />
               <span className="font-bold sm:inline-block font-headline">
-                SkillMapper AI
+                SkillPath AI
               </span>
             </Link>
           </div>
