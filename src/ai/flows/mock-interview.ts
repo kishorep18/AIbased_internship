@@ -2,9 +2,9 @@
 'use server';
 
 /**
- * @fileOverview Conducts a mock interview based on a resume.
+ * @fileOverview Conducts a mock interview based on a resume and suggests jobs.
  *
- * - conductInterview - A function that analyzes a resume and generates interview questions.
+ * - conductInterview - A function that analyzes a resume, generates interview questions, and suggests jobs.
  * - ConductInterviewInput - The input type for the conductInterview function.
  * - ConductInterviewOutput - The return type for the conductInterview function.
  */
@@ -24,6 +24,13 @@ const ConductInterviewOutputSchema = z.object({
       category: z.string().describe('The category of the question (e.g., "Technical", "Behavioral", "Resume-specific").'),
     })
   ).describe('A list of initial interview questions.'),
+  jobMatches: z.array(
+    z.object({
+        jobTitle: z.string().describe("A suitable job title for the candidate."),
+        company: z.string().describe("A plausible company that would hire for this role."),
+        reason: z.string().describe("A brief reason why the candidate is a good fit for this role based on their resume.")
+    })
+  ).describe("A list of 3-5 job recommendations based on the user's skills.")
 });
 export type ConductInterviewOutput = z.infer<typeof ConductInterviewOutputSchema>;
 
@@ -35,20 +42,24 @@ const prompt = ai.definePrompt({
   name: 'conductInterviewPrompt',
   input: {schema: ConductInterviewInputSchema},
   output: {schema: ConductInterviewOutputSchema},
-  prompt: `You are an expert technical recruiter and interviewer. Your task is to conduct a mock interview with a candidate based on their resume.
-
-  Analyze the following resume text and generate 5 initial interview questions. The questions should be a mix of:
-  1.  Questions directly related to the projects and experiences listed in the resume.
-  2.  Technical questions based on the skills mentioned (e.g., programming languages, frameworks).
-  3.  General industry-based questions relevant to the roles the candidate seems to be targeting.
-  4.  Behavioral questions.
+  prompt: `You are an expert technical recruiter and career advisor. Your task is to analyze a candidate's resume.
 
   Candidate's Resume Text:
   ---
   {{{resumeText}}}
   ---
 
-  Please provide 5 diverse and insightful questions to start the interview. Categorize each question.
+  Based on the resume, perform two tasks:
+
+  1.  **Job Matching**: Analyze the skills, experience, and projects. Recommend 3-5 specific job roles that are a strong fit. For each role, suggest a plausible company that hires for that position and provide a brief, one-sentence reason why the candidate is a good match.
+
+  2.  **Question Generation**: Generate 5 initial interview questions. The questions should be a mix of:
+      - Questions directly related to the projects and experiences listed.
+      - Technical questions based on the skills mentioned.
+      - General industry-based questions.
+      - Behavioral questions.
+
+  Please provide both the job matches and the interview questions in your response.
   `,
 });
 

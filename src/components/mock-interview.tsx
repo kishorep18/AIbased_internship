@@ -7,10 +7,10 @@ import type { AnalyzeVideoFeedbackOutput } from "@/ai/flows/analyze-video-feedba
 import { getInterviewQuestionsFromResume, getVideoFeedback } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Loader2, Video, ArrowRight, RefreshCw, Mic, MicOff, Upload } from "lucide-react";
+import { Loader2, Video, ArrowRight, RefreshCw, Mic, MicOff, Upload, Building, Briefcase, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { FeedbackCard } from "@/components/feedback-card";
@@ -26,6 +26,7 @@ export default function MockInterview() {
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [feedbackResults, setFeedbackResults] = useState<FeedbackWithQuestion[]>([]);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [showVideoInterview, setShowVideoInterview] = useState(false);
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -66,7 +67,7 @@ export default function MockInterview() {
   }, [startRecording]);
 
   useEffect(() => {
-    if (interviewState && !showFeedback) {
+    if (showVideoInterview) {
       const getCameraPermission = async () => {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -98,10 +99,10 @@ export default function MockInterview() {
         }
       }
     }
-  }, [interviewState, showFeedback, setupMediaRecorder, toast]);
+  }, [showVideoInterview, setupMediaRecorder, toast]);
 
 
-  const handleStartInterview = async () => {
+  const handleResumeAnalysis = async () => {
     if (!resumeFile) {
       toast({
         variant: "destructive",
@@ -116,15 +117,16 @@ export default function MockInterview() {
     setShowFeedback(false);
     setFeedbackResults([]);
     setCurrentQuestionIndex(0);
+    setShowVideoInterview(false);
     
     try {
         const formData = new FormData();
         formData.append("resume", resumeFile);
         const result = await getInterviewQuestionsFromResume(formData);
-        if (result.initialQuestions.length === 0) {
+        if (result.initialQuestions.length === 0 && result.jobMatches.length === 0) {
             toast({
-                title: "Could not generate questions",
-                description: "The AI could not generate questions from your resume. Please try again with a different file.",
+                title: "Could not analyze resume",
+                description: "The AI could not extract information from your resume. Please try again with a different file.",
             });
         }
         setInterviewState(result);
@@ -132,7 +134,7 @@ export default function MockInterview() {
         toast({
             variant: "destructive",
             title: "An error occurred",
-            description: error.message || "Failed to start interview. Please try again later.",
+            description: error.message || "Failed to analyze resume. Please try again later.",
         });
     } finally {
         setIsLoading(false);
@@ -192,6 +194,7 @@ export default function MockInterview() {
     setCurrentQuestionIndex(0);
     setFeedbackResults([]);
     setShowFeedback(false);
+    setShowVideoInterview(false);
   };
 
   if (showFeedback) {
@@ -236,11 +239,11 @@ export default function MockInterview() {
           AI Mock Interview
         </h1>
         <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Upload your resume, and our AI will conduct a real-time video mock interview based on your skills and experience.
+          Upload your resume to get job matches and practice a real-time video interview.
         </p>
       </section>
 
-      {!interviewState && (
+      {!showVideoInterview && (
         <section className="mt-8 md:mt-12 max-w-2xl mx-auto">
           <Card className="shadow-lg border-2 border-primary/20">
             <CardHeader>
@@ -248,7 +251,7 @@ export default function MockInterview() {
                 Upload Your Resume
               </CardTitle>
               <CardDescription className="text-center">
-                Upload a PDF, TXT, or MD file to get started.
+                Upload a PDF, TXT, or MD file to get job matches and interview questions.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -264,7 +267,7 @@ export default function MockInterview() {
                  {resumeFile && <p className="text-sm text-muted-foreground mt-2">Selected: {resumeFile.name}</p>}
               </div>
               <Button
-                onClick={handleStartInterview}
+                onClick={handleResumeAnalysis}
                 disabled={isLoading || !resumeFile}
                 className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
                 size="lg"
@@ -272,9 +275,9 @@ export default function MockInterview() {
                 {isLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
-                  <Video className="mr-2 h-4 w-4" />
+                  <Sparkles className="mr-2 h-4 w-4" />
                 )}
-                Start Video Interview
+                Analyze My Resume
               </Button>
             </CardContent>
           </Card>
@@ -288,7 +291,63 @@ export default function MockInterview() {
          </div>
       )}
 
-      {interviewState && !showFeedback && (
+      {interviewState && !showVideoInterview && (
+          <section className="mt-8 md:mt-12 max-w-4xl mx-auto space-y-8">
+              {interviewState.jobMatches && interviewState.jobMatches.length > 0 && (
+                <Card className="shadow-lg border-2 border-accent/20">
+                    <CardHeader>
+                        <CardTitle className="text-center text-2xl font-headline flex items-center justify-center gap-2">
+                            <Sparkles className="h-6 w-6 text-accent" />
+                            AI Job Matches
+                        </CardTitle>
+                        <CardDescription className="text-center">Based on your resume, here are some roles you could be a great fit for.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="grid md:grid-cols-2 gap-4">
+                        {interviewState.jobMatches.map((job, index) => (
+                            <Card key={index} className="bg-background/50">
+                                <CardHeader>
+                                    <CardTitle className="text-lg flex items-center gap-2">
+                                        <Briefcase className="h-5 w-5 text-primary" />
+                                        {job.jobTitle}
+                                    </CardTitle>
+                                    <CardDescription className="flex items-center gap-2 pt-1">
+                                        <Building className="h-4 w-4" />
+                                        {job.company}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <p className="text-sm text-muted-foreground">{job.reason}</p>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </CardContent>
+                </Card>
+              )}
+
+             {interviewState.initialQuestions && interviewState.initialQuestions.length > 0 && (
+                <Card className="shadow-lg border-2 border-primary/20">
+                    <CardHeader>
+                        <CardTitle className="text-center text-2xl font-headline">Ready for your Interview?</CardTitle>
+                        <CardDescription className="text-center">
+                            We have prepared {interviewState.initialQuestions.length} questions for you.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardFooter className="flex-col gap-4">
+                        <Button onClick={() => setShowVideoInterview(true)} size="lg">
+                            <Video className="mr-2 h-4 w-4" />
+                            Start Video Interview
+                        </Button>
+                        <Button onClick={resetInterview} variant="outline" size="sm">
+                            <RefreshCw className="mr-2 h-4 w-4" />
+                            Use a Different Resume
+                        </Button>
+                    </CardFooter>
+                </Card>
+             )}
+          </section>
+      )}
+
+      {showVideoInterview && interviewState && (
         <section className="mt-12 max-w-5xl mx-auto">
             <Card className="shadow-xl border-2 border-primary/20">
                  <CardHeader>

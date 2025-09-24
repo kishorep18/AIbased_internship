@@ -52,10 +52,8 @@ export async function getInterviewQuestionsFromResume(
 
     const result = await conductInterview({ resumeText });
 
-    if (!result?.initialQuestions?.length) {
-      return { initialQuestions: [] };
-    }
-    return result;
+    return result || { initialQuestions: [], jobMatches: [] };
+
   } catch (error) {
     console.error("Error processing resume:", error);
     // Ensure a user-friendly message is thrown.
