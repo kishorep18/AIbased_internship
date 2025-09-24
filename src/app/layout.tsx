@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/use-auth';
 
 export const metadata: Metadata = {
-  title: 'InternMatch AI',
+  title: 'SkillMapper AI',
   description: 'Find your perfect internship with AI-powered recommendations.',
 };
 
