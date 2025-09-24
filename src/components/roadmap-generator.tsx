@@ -204,7 +204,7 @@ export default function RoadmapGenerator() {
           Your Career Roadmap
         </h1>
         <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Get a personalized, step-by-step guide to landing your dream internship.
+          Get a personalized, step-by-step guide to landing your dream job.
         </p>
       </section>
 
