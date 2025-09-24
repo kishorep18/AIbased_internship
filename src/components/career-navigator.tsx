@@ -56,7 +56,7 @@ export default function CareerNavigator() {
     },
   });
 
-  const handleGetPathway = async (values: z.infer<typeof formSchema>>) => {
+  const handleGetPathway = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     setPathwayData(null);
     try {
