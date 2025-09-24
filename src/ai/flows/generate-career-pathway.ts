@@ -47,6 +47,7 @@ const GenerateCareerPathwayOutputSchema = z.object({
           description: z.string().describe('A detailed description of the action to take.'),
           nsqfLevel: z.string().optional().describe('The corresponding NSQF level for this step, if applicable (e.g., "Level 3", "Level 4").'),
           type: z.string().describe('The type of action, e.g., "Course", "Certification", "Apprenticeship", "Job".'),
+          applyLink: z.string().url().optional().describe('A URL to apply or learn more about this step.'),
         })
       ).describe('A detailed, step-by-step career path for the learner.'),
     })
@@ -85,7 +86,8 @@ const prompt = ai.definePrompt({
   3.  **Integrate Labor Market Data:** Your recommendations should reflect current job demands. Prioritize skills and roles that are emerging or in high demand. For example, if the user wants to be in the automotive industry, consider suggesting "EV maintenance" as a module.
   4.  **Generate 3 Pathways:** Create a "Fast-Track" pathway (intensive, possibly higher cost), a "Budget-Friendly" pathway (leveraging free resources or government schemes), and a "Step-by-Step" pathway (a balanced approach).
   5.  **Define a Step-by-Step Dashboard:** For each pathway, create a clear, sequential career dashboard. Each step should include a title, description, the type of action (Course, Certification, Apprenticeship, Job), and where applicable, the NSQF level.
-  6.  **Estimate Timelines:** Provide a realistic estimated time to complete each pathway.
+  6.  **Provide Actionable Links:** For each step in the dashboard, provide a plausible 'applyLink' URL. This link should direct to a relevant course, certification, or job platform (e.g., Coursera, Udemy, LinkedIn, government portals). For the "Fast-Track" pathway specifically, ensure you include links for each step, such as for bootcamps, certifications (Google, Meta), and specialized internships.
+  7.  **Estimate Timelines:** Provide a realistic estimated time to complete each pathway.
 
   Your final output must be a comprehensive plan that guides the learner from their current state to their desired job role.
   `,

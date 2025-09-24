@@ -10,12 +10,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Compass, Sparkles, Zap, Gem, Gauge, Clock, StepForward, Award, Briefcase, Building, User } from "lucide-react";
+import { Loader2, Compass, Sparkles, Zap, Gem, Gauge, Clock, StepForward, Award, Briefcase, Building, User, Link as LinkIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { getCareerPathway } from "@/app/actions";
 import type { GenerateCareerPathwayInput, GenerateCareerPathwayOutput } from "@/ai/flows/generate-career-pathway";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import Link from 'next/link';
 
 const formSchema = z.object({
   name: z.string().min(2, "Please enter your name."),
@@ -294,6 +295,14 @@ export default function CareerNavigator() {
                                           <p className="mb-4 text-base font-normal text-muted-foreground">
                                             {step.description}
                                           </p>
+                                          {step.applyLink && (
+                                            <Button asChild size="sm" variant="outline">
+                                                <Link href={step.applyLink} target="_blank">
+                                                    <LinkIcon className="mr-2 h-4 w-4" />
+                                                    Apply
+                                                </Link>
+                                            </Button>
+                                          )}
                                         </li>
                                       )
                                   })}
@@ -315,5 +324,3 @@ export default function CareerNavigator() {
     </div>
   );
 }
-
-    
